@@ -1,0 +1,287 @@
+package com.example.colognerecommendation.service;
+
+import com.example.colognerecommendation.engine.RecommendationEngine;
+import com.example.colognerecommendation.engine.RecommendationResult;
+import com.example.colognerecommendation.model.AppUser;
+import com.example.colognerecommendation.model.Fragrance;
+import com.example.colognerecommendation.model.Occasion;
+import com.example.colognerecommendation.model.Weather;
+import com.example.colognerecommendation.repository.FragranceRepository;
+import com.example.colognerecommendation.repository.UserRepository;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import jakarta.annotation.PostConstruct;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.util.*;
+import java.util.stream.Collectors;
+
+/**
+ * Central business-logic service for the Cologne Advisor application.
+ *
+ * <p>Responsibilities:
+ * <ol>
+ *   <li><b>Catalogue seeding</b> – on first startup, reads {@code fragrances.json} from the
+ *       classpath and populates the {@code fragrance} database table if it is empty.</li>
+ *   <li><b>Catalogue queries</b> – exposes all fragrances and a keyword search over brand,
+ *       name, and scent family.</li>
+ *   <li><b>Fragrance CRUD</b> – save and delete fragrances on behalf of the admin panel.</li>
+ *   <li><b>User collection management</b> – adds, removes, and retrieves the per-user
+ *       fragrance list with optional sorting and filtering.</li>
+ *   <li><b>Recommendations</b> – delegates to {@link RecommendationEngine} after fetching
+ *       the user's collection.</li>
+ * </ol>
+ *
+ * <p>All collection operations are scoped by {@code username} (the authenticated principal's name)
+ * so each user's data remains fully isolated from other users'.
+ */
+@Service
+public class FragranceService {
+
+    private final RecommendationEngine engine = new RecommendationEngine();
+    private final FragranceRepository  fragranceRepository;
+    private final UserRepository       userRepository;
+
+    public FragranceService(FragranceRepository fragranceRepository,
+                            UserRepository userRepository) {
+        this.fragranceRepository = fragranceRepository;
+        this.userRepository      = userRepository;
+    }
+
+    // ── Seeding ───────────────────────────────────────────────────────────────
+
+    /**
+     * Populates the {@code fragrance} table from {@code fragrances.json} on application startup.
+     *
+     * <p>The method is idempotent: if any rows already exist in the table it exits immediately,
+     * so the seed data is never duplicated across restarts.
+     *
+     * <p>Before saving, the fragrances are sorted by their original JSON {@code id} value and
+     * then that ID is nulled out. This ensures that H2's IDENTITY column assigns IDs 1, 2, 3 …
+     * in the same order as the JSON file, keeping existing {@code user_collection} references valid.
+     *
+     * @throws IllegalStateException if the JSON file cannot be found or parsed
+     */
+    @PostConstruct
+    public void seedDataset() {
+        if (fragranceRepository.count() > 0) return;
+
+        try (InputStreamReader reader = new InputStreamReader(
+                Objects.requireNonNull(
+                        getClass().getResourceAsStream("/fragrances.json"),
+                        "fragrances.json not found on classpath"))) {
+
+            Type type = new TypeToken<List<Fragrance>>() {}.getType();
+            List<Fragrance> loaded = new Gson().fromJson(reader, type);
+
+            loaded.sort(Comparator.comparingInt(f -> (f.id != null ? f.id : 0)));
+            loaded.forEach(f -> f.id = null);
+
+            fragranceRepository.saveAll(loaded);
+
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to seed fragrance dataset", e);
+        }
+    }
+
+    // ── Catalogue queries ─────────────────────────────────────────────────────
+
+    /**
+     * Returns the complete fragrance catalogue in database insertion order.
+     *
+     * @return an unordered list of all fragrances currently in the database
+     */
+    public List<Fragrance> getAllFragrances() {
+        return fragranceRepository.findAll();
+    }
+
+    /**
+     * Returns all fragrances whose brand, name, or scent family contains the query string
+     * (case-insensitive). Returns the full catalogue when the query is blank.
+     *
+     * @param query the search term entered by the user; may be null or blank
+     * @return matching fragrances, or all fragrances if the query is empty
+     */
+    public List<Fragrance> searchFragrances(String query) {
+        if (query == null || query.isBlank()) return getAllFragrances();
+        String q = query.toLowerCase().trim();
+        return fragranceRepository.findAll().stream()
+                .filter(f -> f.brand.toLowerCase().contains(q)
+                          || f.name.toLowerCase().contains(q)
+                          || f.scentFamily.toLowerCase().contains(q))
+                .collect(Collectors.toList());
+    }
+
+    // ── Fragrance CRUD (admin) ────────────────────────────────────────────────
+
+    /**
+     * Retrieves a single fragrance by its primary key.
+     *
+     * @param id the fragrance's database ID
+     * @return an {@link Optional} containing the fragrance, or empty if the ID does not exist
+     */
+    public Optional<Fragrance> findFragranceById(int id) {
+        return fragranceRepository.findById(id);
+    }
+
+    /**
+     * Persists a fragrance to the database. Inserts a new row when the fragrance's ID is
+     * {@code null}; updates the existing row when the ID is set.
+     *
+     * @param fragrance the fragrance to save; its {@code id} field is updated after insert
+     */
+    public void saveFragrance(Fragrance fragrance) {
+        fragranceRepository.save(fragrance);
+    }
+
+    /**
+     * Deletes a fragrance from the catalogue and removes its ID from every user's collection.
+     *
+     * <p>Both operations run inside a single transaction so a partial failure cannot leave
+     * orphaned IDs in the {@code user_collection} table.
+     *
+     * @param id the primary key of the fragrance to delete
+     */
+    @Transactional
+    public void deleteFragrance(int id) {
+        userRepository.removeFragranceFromAllCollections(id);
+        fragranceRepository.deleteById(id);
+    }
+
+    // ── User collection ───────────────────────────────────────────────────────
+
+    /**
+     * Retrieves the {@link AppUser} for the given username, throwing if not found.
+     * Private helper used by all collection methods.
+     *
+     * @param username the authenticated principal's username
+     * @return the corresponding {@link AppUser} entity
+     * @throws IllegalStateException if no account exists for the given username
+     */
+    private AppUser getUser(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalStateException("User not found: " + username));
+    }
+
+    /**
+     * Returns the full list of fragrances in the specified user's collection,
+     * loaded from the database in a single {@code WHERE id IN (...)} query.
+     *
+     * @param username the authenticated principal's username
+     * @return the user's collected fragrances, or an empty list if the collection is empty
+     */
+    public List<Fragrance> getUserCollection(String username) {
+        Set<Integer> ids = getUser(username).getCollectionIds();
+        if (ids.isEmpty()) return Collections.emptyList();
+        return fragranceRepository.findAllById(ids);
+    }
+
+    /**
+     * Returns the user's collection with optional filtering by occasion type and
+     * sorted by the specified field.
+     *
+     * <p><b>Filter values:</b>
+     * <ul>
+     *   <li>{@code "office"} – keep only fragrances where {@code officeSafe == true}</li>
+     *   <li>{@code "casual"} – keep only fragrances where {@code officeSafe == false}</li>
+     *   <li>{@code "all"} (default) – no filtering applied</li>
+     * </ul>
+     *
+     * <p><b>Sort values:</b> {@code "name"} (default), {@code "brand"}, {@code "scentFamily"}
+     * sort alphabetically ascending. {@code "projection"} and {@code "longevity"} sort
+     * numerically descending (highest first).
+     *
+     * @param sort     the field to sort by
+     * @param filter   the occasion filter to apply
+     * @param username the authenticated principal's username
+     * @return the filtered and sorted collection; may be empty
+     */
+    public List<Fragrance> getSortedFilteredCollection(String sort, String filter, String username) {
+        List<Fragrance> list = getUserCollection(username);
+
+        if ("office".equals(filter)) {
+            list = list.stream().filter(f -> f.officeSafe).collect(Collectors.toList());
+        } else if ("casual".equals(filter)) {
+            list = list.stream().filter(f -> !f.officeSafe).collect(Collectors.toList());
+        }
+
+        Comparator<Fragrance> comparator;
+        switch (sort) {
+            case "brand":
+                comparator = Comparator.comparing(f -> f.brand);
+                break;
+            case "projection":
+                comparator = Comparator.comparingInt((Fragrance f) -> f.projection).reversed();
+                break;
+            case "longevity":
+                comparator = Comparator.comparingInt((Fragrance f) -> f.longevity).reversed();
+                break;
+            case "scentFamily":
+                comparator = Comparator.comparing(f -> f.scentFamily);
+                break;
+            default:
+                comparator = Comparator.comparing(f -> f.name);
+                break;
+        }
+
+        list.sort(comparator);
+        return list;
+    }
+
+    /**
+     * Returns an unmodifiable view of the fragrance IDs in the user's collection.
+     * Used by the Add page to determine which catalogue cards should show "In Collection".
+     *
+     * @param username the authenticated principal's username
+     * @return an unmodifiable set of fragrance IDs
+     */
+    public Set<Integer> getCollectionIds(String username) {
+        return Collections.unmodifiableSet(getUser(username).getCollectionIds());
+    }
+
+    /**
+     * Adds a fragrance to the specified user's collection and persists the change.
+     * Does nothing if the fragrance is already in the collection (Set semantics).
+     *
+     * @param fragranceId the ID of the fragrance to add
+     * @param username    the authenticated principal's username
+     */
+    @Transactional
+    public void addToCollection(int fragranceId, String username) {
+        AppUser user = getUser(username);
+        user.getCollectionIds().add(fragranceId);
+        userRepository.save(user);
+    }
+
+    /**
+     * Removes a fragrance from the specified user's collection and persists the change.
+     * Does nothing if the fragrance was not in the collection.
+     *
+     * @param fragranceId the ID of the fragrance to remove
+     * @param username    the authenticated principal's username
+     */
+    @Transactional
+    public void removeFromCollection(int fragranceId, String username) {
+        AppUser user = getUser(username);
+        user.getCollectionIds().remove(fragranceId);
+        userRepository.save(user);
+    }
+
+    // ── Recommendation ────────────────────────────────────────────────────────
+
+    /**
+     * Fetches the user's collection and delegates to {@link RecommendationEngine}
+     * to produce a ranked list of up to 3 recommendations for the given context.
+     *
+     * @param weather  the current outdoor temperature band
+     * @param occasion the intended social context
+     * @param username the authenticated principal's username
+     * @return ranked list of up to 3 {@link RecommendationResult} objects; empty if collection is empty
+     */
+    public List<RecommendationResult> getRecommendations(Weather weather, Occasion occasion, String username) {
+        return engine.recommend(getUserCollection(username), weather, occasion);
+    }
+}

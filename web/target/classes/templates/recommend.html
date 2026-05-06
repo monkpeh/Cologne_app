@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Recommend – Cologne Advisor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background: #f8f9fa; }
+        .navbar-brand  { font-weight: 700; letter-spacing: .5px; }
+        .brand-label   { font-size: .7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+        .star-on  { color: #f59e0b; }
+        .star-off { color: #dee2e6; }
+        .rank-badge {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; font-weight: 800;
+            flex-shrink: 0;
+        }
+        .rank-1 { background: #fef3c7; color: #b45309; }
+        .rank-2 { background: #f1f5f9; color: #475569; }
+        .rank-3 { background: #fdf2f8; color: #9d174d; }
+        .progress { height: 8px; }
+        .result-card { border-left: 4px solid; }
+        .result-card.rank-border-1 { border-color: #f59e0b; }
+        .result-card.rank-border-2 { border-color: #94a3b8; }
+        .result-card.rank-border-3 { border-color: #ec4899; }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="/"><i class="bi bi-droplet-fill me-2"></i>Cologne Advisor</a>
+        <div class="navbar-nav ms-auto flex-row align-items-center gap-3">
+            <a class="nav-link" href="/collection"><i class="bi bi-collection me-1"></i>Collection</a>
+            <a class="nav-link" href="/add"><i class="bi bi-plus-circle me-1"></i>Add</a>
+            <a class="nav-link active fw-semibold" href="/recommend"><i class="bi bi-stars me-1"></i>Recommend</a>
+            <a class="nav-link" href="/admin" sec:authorize="hasRole('ADMIN')"><i class="bi bi-shield-lock me-1"></i>Admin</a>
+            <span class="navbar-text text-white-50 small" sec:authentication="name"></span>
+            <form th:action="@{/logout}" method="post" class="d-inline m-0">
+                <button class="btn btn-sm btn-outline-light">
+                    <i class="bi bi-box-arrow-right me-1"></i>Sign Out
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <h2 class="fw-bold mb-4"><i class="bi bi-stars me-2 text-primary"></i>Get a Recommendation</h2>
+
+    <!-- Empty-collection warning -->
+    <div th:if="${collectionEmpty}" class="alert alert-warning d-flex align-items-center gap-2 mb-4">
+        <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+        <div>
+            Your collection is empty.
+            <a href="/add" class="alert-link">Add some fragrances</a> first, then come back here.
+        </div>
+    </div>
+
+    <!-- Input form -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+            <form method="post" th:action="@{/recommend}">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-5">
+                        <label class="form-label fw-semibold">
+                            <i class="bi bi-thermometer-half me-1"></i>Weather / Temperature
+                        </label>
+                        <select name="weather" class="form-select">
+                            <option th:each="w : ${weathers}"
+                                    th:value="${w.name()}"
+                                    th:text="${w.label}"
+                                    th:selected="${w.name() == selectedWeather}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label fw-semibold">
+                            <i class="bi bi-calendar-event me-1"></i>Occasion
+                        </label>
+                        <select name="occasion" class="form-select">
+                            <option th:each="o : ${occasions}"
+                                    th:value="${o.name()}"
+                                    th:text="${o.label}"
+                                    th:selected="${o.name() == selectedOccasion}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary w-100" type="submit" th:disabled="${collectionEmpty}">
+                            <i class="bi bi-stars me-1"></i>Go
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div th:if="${results != null and !results.isEmpty()}">
+        <h5 class="fw-semibold mb-3 text-secondary">
+            Top <span th:text="${results.size()}"></span> recommendations for your selection
+        </h5>
+
+        <div class="d-flex flex-column gap-3">
+            <div th:each="r, iter : ${results}"
+                 class="card border-0 shadow-sm result-card"
+                 th:classappend="'rank-border-' + ${iter.index + 1}">
+                <div class="card-body p-4">
+                    <div class="d-flex gap-3 align-items-start">
+
+                        <!-- Rank badge -->
+                        <div class="rank-badge"
+                             th:classappend="'rank-' + ${iter.index + 1}"
+                             th:text="'#' + ${iter.index + 1}">
+                        </div>
+
+                        <!-- Bottle image -->
+                        <img th:if="${r.fragrance.imageUrl != null and !r.fragrance.imageUrl.isEmpty()}"
+                             th:src="${r.fragrance.imageUrl}" th:alt="${r.fragrance.name}"
+                             style="width:80px;height:80px;object-fit:contain;background:#f8f9fa;border-radius:8px;flex-shrink:0">
+                        <div th:unless="${r.fragrance.imageUrl != null and !r.fragrance.imageUrl.isEmpty()}"
+                             style="width:80px;height:80px;background:#f8f9fa;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center">
+                            <i class="bi bi-droplet-fill text-primary opacity-25" style="font-size:2rem"></i>
+                        </div>
+
+                        <div class="flex-grow-1">
+                            <!-- Brand + name -->
+                            <p class="brand-label text-primary mb-0" th:text="${r.fragrance.brand}"></p>
+                            <h4 class="fw-bold mb-1" th:text="${r.fragrance.name}"></h4>
+                            <span class="badge bg-secondary mb-3" th:text="${r.fragrance.scentFamily}"></span>
+
+                            <!-- Match score bar -->
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <span class="fw-semibold text-nowrap">Match score</span>
+                                <div class="progress flex-grow-1">
+                                    <div class="progress-bar bg-primary"
+                                         role="progressbar"
+                                         th:style="'width:' + ${r.scorePercent} + '%'"
+                                         th:attr="aria-valuenow=${r.scorePercent}"
+                                         aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                                <span class="fw-bold text-primary text-nowrap" th:text="${r.scorePercent} + '%'"></span>
+                            </div>
+
+                            <!-- Stars -->
+                            <div class="d-flex gap-4 mb-3">
+                                <div>
+                                    <small class="text-muted d-block">Projection</small>
+                                    <span th:each="i : ${#numbers.sequence(1,5)}">
+                                        <i th:class="${i <= r.fragrance.projection} ? 'bi bi-star-fill star-on' : 'bi bi-star star-off'"></i>
+                                    </span>
+                                </div>
+                                <div>
+                                    <small class="text-muted d-block">Longevity</small>
+                                    <span th:each="i : ${#numbers.sequence(1,5)}">
+                                        <i th:class="${i <= r.fragrance.longevity} ? 'bi bi-star-fill star-on' : 'bi bi-star star-off'"></i>
+                                    </span>
+                                </div>
+                                <div class="align-self-end">
+                                    <span th:if="${r.fragrance.officeSafe}"  class="badge bg-success"><i class="bi bi-briefcase me-1"></i>Office Safe</span>
+                                    <span th:unless="${r.fragrance.officeSafe}" class="badge bg-warning text-dark"><i class="bi bi-moon-stars me-1"></i>Casual / Evening</span>
+                                </div>
+                            </div>
+
+                            <!-- Reasons -->
+                            <div class="bg-light rounded p-3">
+                                <p class="fw-semibold small mb-2 text-muted text-uppercase" style="letter-spacing:.5px">
+                                    Why this fragrance?
+                                </p>
+                                <ul class="mb-0 ps-3">
+                                    <li th:each="reason : ${r.reasons}"
+                                        class="small"
+                                        th:text="${reason}">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- No results after submitting (shouldn't happen with a non-empty collection) -->
+    <div th:if="${results != null and results.isEmpty() and !collectionEmpty}"
+         class="text-center py-4 text-muted">
+        <i class="bi bi-emoji-frown fs-1"></i>
+        <p class="mt-2">No recommendations could be generated. Try a different context.</p>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
