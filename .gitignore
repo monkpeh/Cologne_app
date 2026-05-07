@@ -2,6 +2,12 @@
 target/
 *.class
 
+# H2 database files
+data/
+*.db
+*.mv.db
+*.trace.db
+
 # IDE
 .idea/
 *.iml
