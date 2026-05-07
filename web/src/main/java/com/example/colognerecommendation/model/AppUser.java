@@ -1,7 +1,9 @@
 package com.example.colognerecommendation.model;
 
 import jakarta.persistence.*;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -56,6 +58,16 @@ public class AppUser {
     @Column(name = "fragrance_id")
     private Set<Integer> collectionIds = new LinkedHashSet<>();
 
+    /**
+     * Per-fragrance star ratings given by this user, keyed by fragrance ID.
+     * Values are in [1, 5]. Stored in the {@code user_ratings} join table.
+     */
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_ratings", joinColumns = @JoinColumn(name = "user_id"))
+    @MapKeyColumn(name = "fragrance_id")
+    @Column(name = "rating")
+    private Map<Integer, Integer> ratings = new HashMap<>();
+
     // ── Getters & setters ─────────────────────────────────────────────────────
 
     /** @return the database primary key */
@@ -86,4 +98,7 @@ public class AppUser {
 
     /** @param role the role to assign — must be {@code "USER"} or {@code "ADMIN"} */
     public void setRole(String role) { this.role = role; }
+
+    /** @return the mutable map of fragrance ID → star rating (1–5) */
+    public Map<Integer, Integer> getRatings() { return ratings; }
 }
