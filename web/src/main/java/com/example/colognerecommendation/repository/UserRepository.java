@@ -52,4 +52,9 @@ public interface UserRepository extends JpaRepository<AppUser, Long> {
     @Transactional
     @Query(value = "DELETE FROM user_collection WHERE fragrance_id = :id", nativeQuery = true)
     void removeFragranceFromAllCollections(@Param("id") int id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM user_ratings WHERE fragrance_id = :id", nativeQuery = true)
+    void removeFragranceFromAllRatings(@Param("id") int id);
 }

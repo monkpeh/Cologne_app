@@ -3,6 +3,7 @@ package com.example.colognerecommendation.service;
 import com.example.colognerecommendation.engine.RecommendationEngine;
 import com.example.colognerecommendation.engine.RecommendationResult;
 import com.example.colognerecommendation.model.AppUser;
+import com.example.colognerecommendation.model.AppUser;
 import com.example.colognerecommendation.model.Fragrance;
 import com.example.colognerecommendation.model.Occasion;
 import com.example.colognerecommendation.model.Weather;
@@ -18,6 +19,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Central business-logic service for the Cologne Advisor application.
@@ -148,6 +150,7 @@ public class FragranceService {
     @Transactional
     public void deleteFragrance(int id) {
         userRepository.removeFragranceFromAllCollections(id);
+        userRepository.removeFragranceFromAllRatings(id);
         fragranceRepository.deleteById(id);
     }
 
@@ -270,11 +273,96 @@ public class FragranceService {
         userRepository.save(user);
     }
 
+    // ── Ratings ───────────────────────────────────────────────────────────────
+
+    /**
+     * Saves or removes a user's star rating for a fragrance they own.
+     * A {@code rating} of 0 removes any existing rating.
+     *
+     * @param fragranceId the fragrance to rate
+     * @param rating      star value 1–5, or 0 to clear
+     * @param username    the authenticated principal's username
+     */
+    @Transactional
+    public void rateFragrance(int fragranceId, int rating, String username) {
+        AppUser user = getUser(username);
+        if (rating <= 0) {
+            user.getRatings().remove(fragranceId);
+        } else {
+            user.getRatings().put(fragranceId, Math.min(5, rating));
+        }
+        userRepository.save(user);
+    }
+
+    /**
+     * Returns the calling user's fragrance-ID → rating map.
+     *
+     * @param username the authenticated principal's username
+     * @return unmodifiable map of fragrance ID to star rating (1–5)
+     */
+    public Map<Integer, Integer> getUserRatings(String username) {
+        return Collections.unmodifiableMap(getUser(username).getRatings());
+    }
+
+    /**
+     * Computes the average rating for every fragrance that has been rated by at
+     * least one user. All user records are scanned once and aggregated in Java.
+     *
+     * @return map of fragrance ID to average star rating (1.0–5.0)
+     */
+    public Map<Integer, Double> getAverageRatings() {
+        Map<Integer, List<Integer>> bucket = new HashMap<>();
+        for (AppUser user : userRepository.findAll()) {
+            user.getRatings().forEach((fid, r) ->
+                bucket.computeIfAbsent(fid, k -> new ArrayList<>()).add(r));
+        }
+        Map<Integer, Double> averages = new HashMap<>();
+        bucket.forEach((fid, list) ->
+            averages.put(fid, list.stream().mapToInt(Integer::intValue).average().orElse(0)));
+        return averages;
+    }
+
+    // ── Suggestions ───────────────────────────────────────────────────────────
+
+    /**
+     * Suggests up to 5 uncollected fragrances that share a scent family with
+     * something already in the user's collection and have a similar season profile.
+     * Season similarity is measured as the combined absolute difference between
+     * the candidate's hot/cold scores and the collection's average hot/cold scores.
+     * Pure Java — no additional data model is required.
+     *
+     * @param username the authenticated principal's username
+     * @return up to 5 suggested fragrances, closest season match first
+     */
+    public List<Fragrance> getSuggestions(String username) {
+        Set<Integer>   ownedIds = getCollectionIds(username);
+        List<Fragrance> owned   = getUserCollection(username);
+        if (owned.isEmpty()) return Collections.emptyList();
+
+        Set<String> ownedFamilies = owned.stream()
+                .map(f -> f.scentFamily)
+                .collect(Collectors.toSet());
+
+        double avgHot  = owned.stream().mapToInt(f -> f.seasonHot).average().orElse(5.0);
+        double avgCold = owned.stream().mapToInt(f -> f.seasonCold).average().orElse(5.0);
+
+        return fragranceRepository.findAll().stream()
+                .filter(f -> !ownedIds.contains(f.id))
+                .filter(f -> ownedFamilies.contains(f.scentFamily))
+                .sorted(Comparator.comparingDouble(f ->
+                        Math.abs(f.seasonHot - avgHot) + Math.abs(f.seasonCold - avgCold)))
+                .limit(5)
+                .collect(Collectors.toList());
+    }
+
     // ── Recommendation ────────────────────────────────────────────────────────
 
     /**
      * Fetches the user's collection and delegates to {@link RecommendationEngine}
      * to produce a ranked list of up to 3 recommendations for the given context.
+     * Results are then personalized using the user's own star ratings: a fragrance
+     * rated 4–5 stars gets a small score boost; 1–2 stars gets a mild penalty.
+     * The blend is 85 % engine score + 15 % user preference signal.
      *
      * @param weather  the current outdoor temperature band
      * @param occasion the intended social context
@@ -282,6 +370,27 @@ public class FragranceService {
      * @return ranked list of up to 3 {@link RecommendationResult} objects; empty if collection is empty
      */
     public List<RecommendationResult> getRecommendations(Weather weather, Occasion occasion, String username) {
-        return engine.recommend(getUserCollection(username), weather, occasion);
+        List<Fragrance> collection = getUserCollection(username);
+        List<RecommendationResult> results = engine.recommend(collection, weather, occasion, collection.size());
+        Map<Integer, Integer> ratings = getUserRatings(username);
+
+        if (!ratings.isEmpty()) {
+            results = results.stream()
+                    .map(r -> {
+                        Integer userRating = ratings.get(r.getFragrance().getId());
+                        if (userRating == null) return r;
+                        double personalized = r.getScore() * 0.85 + (userRating / 5.0) * 0.15;
+                        List<String> reasons = new ArrayList<>(r.getReasons());
+                        if (userRating >= 4) reasons.add("One of your highly rated fragrances");
+                        return new RecommendationResult(r.getFragrance(), personalized, reasons);
+                    })
+                    .sorted(Comparator.comparingDouble(RecommendationResult::getScore).reversed())
+                    .limit(3)
+                    .collect(Collectors.toList());
+        } else {
+            results = results.stream().limit(3).collect(Collectors.toList());
+        }
+
+        return results;
     }
 }

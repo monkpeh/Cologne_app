@@ -64,9 +64,12 @@ public class CologneController {
             @RequestParam(defaultValue = "all")  String filter,
             Principal principal,
             Model model) {
-        model.addAttribute("collection", service.getSortedFilteredCollection(sort, filter, principal.getName()));
-        model.addAttribute("sort",       sort);
-        model.addAttribute("filter",     filter);
+        String username = principal.getName();
+        model.addAttribute("collection",  service.getSortedFilteredCollection(sort, filter, username));
+        model.addAttribute("sort",        sort);
+        model.addAttribute("filter",      filter);
+        model.addAttribute("ratings",     service.getUserRatings(username));
+        model.addAttribute("suggestions", service.getSuggestions(username));
         return "collection";
     }
 
@@ -84,6 +87,20 @@ public class CologneController {
      * @param ra        flash attributes for the post-redirect toast message
      * @return a redirect to {@code /collection} with sort and filter parameters
      */
+    @PostMapping("/collection/rate/{id}")
+    public String rate(@PathVariable int id,
+                       @RequestParam int rating,
+                       @RequestParam(defaultValue = "name") String sort,
+                       @RequestParam(defaultValue = "all")  String filter,
+                       Principal principal,
+                       RedirectAttributes ra) {
+        service.rateFragrance(id, rating, principal.getName());
+        ra.addFlashAttribute("toast", rating > 0
+                ? "Rating saved — " + rating + " star" + (rating == 1 ? "" : "s") + "."
+                : "Rating cleared.");
+        return "redirect:/collection?sort=" + sort + "&filter=" + filter;
+    }
+
     @PostMapping("/collection/remove/{id}")
     public String remove(@PathVariable int id,
                          @RequestParam(defaultValue = "name") String sort,
@@ -113,9 +130,10 @@ public class CologneController {
     public String addPage(@RequestParam(defaultValue = "") String q,
                           Principal principal,
                           Model model) {
-        model.addAttribute("fragrances",    service.searchFragrances(q));
-        model.addAttribute("query",         q);
-        model.addAttribute("collectionIds", service.getCollectionIds(principal.getName()));
+        model.addAttribute("fragrances",      service.searchFragrances(q));
+        model.addAttribute("query",           q);
+        model.addAttribute("collectionIds",   service.getCollectionIds(principal.getName()));
+        model.addAttribute("averageRatings",  service.getAverageRatings());
         return "add";
     }
 
