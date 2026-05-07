@@ -114,6 +114,14 @@
                     <span th:if="${f.officeSafe}"  class="badge bg-success"><i class="bi bi-briefcase me-1"></i>Office Safe</span>
                     <span th:unless="${f.officeSafe}" class="badge bg-warning text-dark"><i class="bi bi-moon-stars me-1"></i>Casual / Evening</span>
 
+                    <!-- Community average rating -->
+                    <div th:if="${averageRatings.containsKey(f.id)}" class="mt-2">
+                        <small class="text-muted me-1">Community</small>
+                        <i class="bi bi-star-fill star-on" style="font-size:.85rem"></i>
+                        <small class="fw-semibold" th:text="${#numbers.formatDecimal(averageRatings.get(f.id), 1, 1)}"></small>
+                        <small class="text-muted">/5</small>
+                    </div>
+
                     <!-- Description tooltip -->
                     <p class="text-muted small mt-2 mb-0" th:text="${f.description}"></p>
                 </div>
