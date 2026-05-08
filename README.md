@@ -67,6 +67,7 @@ An admin account is created automatically on first startup:
 |---|---|
 | Username | `admin` |
 | Password | `admin123` |
+This User has all fragrances already in their collection
 
 You can change these in `web/src/main/resources/application.properties`:
 
