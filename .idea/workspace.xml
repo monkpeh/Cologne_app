@@ -4,20 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="baa64534-eeef-4244-a0d8-64ef1ca103ed" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/model/UserStats.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/main/resources/templates/compare.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/main/resources/templates/stats.html" afterDir="false" />
+    <list default="true" id="baa64534-eeef-4244-a0d8-64ef1ca103ed" name="Changes" comment="Added a compare and stat page for different fragrance">
+      <change afterPath="$PROJECT_DIR$/web/src/main/resources/templates/fragrance_new.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/cologne-app.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/cologne-app.mv.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/cologne-app.mv.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/AdminController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/CologneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/CologneController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/service/FragranceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/service/FragranceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/add.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/admin-fragrance-form.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/admin-fragrance-form.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/admin-fragrances.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/admin-fragrances.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/admin.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/collection.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/collection.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/recommend.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/recommend.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/admin-fragrance-form.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/admin_fragrance_form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/admin-fragrances.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/admin_fragrances.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,15 +24,15 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Class" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="claude2" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -74,7 +71,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "Spring Boot.CologneWebApp.executor": "Run",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "claude2",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -134,6 +131,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="rating and suggestion" />
     <MESSAGE value="Rating and suggestion" />
-    <option name="LAST_COMMIT_MESSAGE" value="Rating and suggestion" />
+    <MESSAGE value="Added a compare and stat page for different fragrance" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a compare and stat page for different fragrance" />
   </component>
 </project>

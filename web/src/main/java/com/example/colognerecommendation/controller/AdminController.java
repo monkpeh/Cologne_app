@@ -204,6 +204,7 @@ public class AdminController {
         f.seasonHot = seasonHot; f.seasonCold = seasonCold;
         f.officeSafe = officeSafe; f.description = description; f.imageUrl = imageUrl;
         fragranceService.saveFragrance(f);
+        fragranceService.syncToJson();
         ra.addFlashAttribute("toast", "Fragrance '" + f.name + "' added.");
         return "redirect:/admin/fragrances";
     }
@@ -268,6 +269,7 @@ public class AdminController {
         f.seasonHot = seasonHot; f.seasonCold = seasonCold;
         f.officeSafe = officeSafe; f.description = description; f.imageUrl = imageUrl;
         fragranceService.saveFragrance(f);
+        fragranceService.syncToJson();
         ra.addFlashAttribute("toast", "Fragrance '" + f.name + "' updated.");
         return "redirect:/admin/fragrances";
     }
@@ -287,6 +289,7 @@ public class AdminController {
     public String deleteFragrance(@PathVariable int id, RedirectAttributes ra) {
         fragranceService.findFragranceById(id).ifPresent(f -> {
             fragranceService.deleteFragrance(id);
+            fragranceService.syncToJson();
             ra.addFlashAttribute("toast", "Fragrance '" + f.name + "' deleted.");
         });
         return "redirect:/admin/fragrances";

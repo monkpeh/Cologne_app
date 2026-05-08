@@ -37,7 +37,7 @@
   },
   {
     "id": 4,
-    "brand": "Dolce & Gabbana",
+    "brand": "Dolce \u0026 Gabbana",
     "name": "Light Blue",
     "scentFamily": "Fresh / Citrus",
     "projection": 3,
@@ -61,7 +61,7 @@
   },
   {
     "id": 6,
-    "brand": "Viktor & Rolf",
+    "brand": "Viktor \u0026 Rolf",
     "name": "Spicebomb",
     "scentFamily": "Spicy / Tobacco",
     "projection": 4,
@@ -74,7 +74,7 @@
   {
     "id": 7,
     "brand": "Yves Saint Laurent",
-    "name": "L'Homme",
+    "name": "L\u0027Homme",
     "scentFamily": "Fresh / Woody",
     "projection": 3,
     "longevity": 3,
@@ -122,7 +122,7 @@
   {
     "id": 11,
     "brand": "Hermès",
-    "name": "Terre d'Hermès",
+    "name": "Terre d\u0027Hermès",
     "scentFamily": "Woody / Mineral",
     "projection": 3,
     "longevity": 4,
@@ -181,7 +181,7 @@
   },
   {
     "id": 16,
-    "brand": "Dolce & Gabbana",
+    "brand": "Dolce \u0026 Gabbana",
     "name": "The One",
     "scentFamily": "Oriental / Tobacco",
     "projection": 4,
@@ -266,7 +266,7 @@
   {
     "id": 23,
     "brand": "Issey Miyake",
-    "name": "L'Eau d'Issey Pour Homme",
+    "name": "L\u0027Eau d\u0027Issey Pour Homme",
     "scentFamily": "Aquatic / Woody",
     "projection": 2,
     "longevity": 3,
@@ -338,7 +338,7 @@
   {
     "id": 29,
     "brand": "Yves Saint Laurent",
-    "name": "La Nuit de L'Homme",
+    "name": "La Nuit de L\u0027Homme",
     "scentFamily": "Oriental / Spicy",
     "projection": 4,
     "longevity": 4,
@@ -358,5 +358,29 @@
     "seasonCold": 3,
     "officeSafe": true,
     "description": "An ultra-fresh aquatic burst of cucumber, marine, and grapefruit over woody musks. Perfect for summer heat."
+  },
+  {
+    "id": 31,
+    "brand": "Paco Rabanne",
+    "name": "1 Million Elixir",
+    "scentFamily": "Woody",
+    "projection": 4,
+    "longevity": 5,
+    "seasonHot": 2,
+    "seasonCold": 9,
+    "officeSafe": true,
+    "description": ""
+  },
+  {
+    "id": 32,
+    "brand": "Valentino",
+    "name": "Coral Fantasy",
+    "scentFamily": "Aromatic/Fruity",
+    "projection": 4,
+    "longevity": 4,
+    "seasonHot": 10,
+    "seasonCold": 10,
+    "officeSafe": true,
+    "description": "Valentino is a Woody Aromatic fragrance for men. Top notes are Red Apple, Cardamom and Calabrian bergamot; middle notes are Lavender, Bourbon Geranium and Clary Sage; base notes are Tobacco Leaf, Patchouli and Haitian Vetiver"
   }
 ]

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${pageTitle} + ' – Admin – Cologne Advisor'">Fragrance Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background: #f8f9fa; }
+        .navbar-brand { font-weight: 700; letter-spacing: .5px; }
+        #imagePreview { height: 180px; object-fit: contain; background: #f1f5f9; border-radius: 8px; }
+        .preview-placeholder { height: 180px; background: #f1f5f9; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="/"><i class="bi bi-droplet-fill me-2"></i>Cologne Advisor</a>
+        <div class="navbar-nav ms-auto flex-row align-items-center gap-3">
+            <a class="nav-link" href="/collection"><i class="bi bi-collection me-1"></i>Collection</a>
+            <a class="nav-link" href="/add"><i class="bi bi-plus-circle me-1"></i>Add</a>
+            <a class="nav-link" href="/recommend"><i class="bi bi-stars me-1"></i>Recommend</a>
+            <a class="nav-link" href="/stats"><i class="bi bi-bar-chart me-1"></i>Stats</a>
+            <a class="nav-link active fw-semibold" href="/admin"><i class="bi bi-shield-lock me-1"></i>Admin</a>
+            <span class="navbar-text text-white-50 small" sec:authentication="name"></span>
+            <form th:action="@{/logout}" method="post" class="d-inline m-0">
+                <button class="btn btn-sm btn-outline-light">
+                    <i class="bi bi-box-arrow-right me-1"></i>Sign Out
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4" style="max-width: 760px">
+
+    <a href="/admin/fragrances" class="text-muted small text-decoration-none">
+        <i class="bi bi-arrow-left me-1"></i>Back to Fragrances
+    </a>
+    <h2 class="fw-bold mt-1 mb-4" th:text="${pageTitle}"></h2>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            <form th:action="${actionUrl}" method="post">
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Brand</label>
+                        <input type="text" name="brand" class="form-control"
+                               th:value="${fragrance.brand}" placeholder="e.g. Dior" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Name</label>
+                        <input type="text" name="name" class="form-control"
+                               th:value="${fragrance.name}" placeholder="e.g. Sauvage" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Scent Family</label>
+                    <input type="text" name="scentFamily" class="form-control"
+                           th:value="${fragrance.scentFamily}" placeholder="e.g. Fresh / Spicy" required>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-6 col-md-3">
+                        <label class="form-label fw-semibold">Projection <small class="text-muted">(1–5)</small></label>
+                        <input type="number" name="projection" class="form-control"
+                               th:value="${fragrance.projection}" min="1" max="5" required>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label fw-semibold">Longevity <small class="text-muted">(1–5)</small></label>
+                        <input type="number" name="longevity" class="form-control"
+                               th:value="${fragrance.longevity}" min="1" max="5" required>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label fw-semibold">Hot season <small class="text-muted">(0–10)</small></label>
+                        <input type="number" name="seasonHot" class="form-control"
+                               th:value="${fragrance.seasonHot}" min="0" max="10" required>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label fw-semibold">Cold season <small class="text-muted">(0–10)</small></label>
+                        <input type="number" name="seasonCold" class="form-control"
+                               th:value="${fragrance.seasonCold}" min="0" max="10" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="officeSafe"
+                               name="officeSafe" th:checked="${fragrance.officeSafe}">
+                        <label class="form-check-label fw-semibold" for="officeSafe">
+                            <i class="bi bi-briefcase me-1"></i>Office Safe
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Description</label>
+                    <textarea name="description" class="form-control" rows="3"
+                              placeholder="Short description of the fragrance…"
+                              th:text="${fragrance.description}"></textarea>
+                </div>
+
+                <!-- Image URL + live preview -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">
+                        <i class="bi bi-image me-1"></i>Image URL <span class="text-muted fw-normal">(optional)</span>
+                    </label>
+                    <input type="url" name="imageUrl" id="imageUrlInput" class="form-control mb-2"
+                           th:value="${fragrance.imageUrl}"
+                           placeholder="https://example.com/cologne-bottle.jpg"
+                           oninput="updatePreview(this.value)">
+                    <div id="previewContainer">
+                        <img th:if="${fragrance.imageUrl != null and !fragrance.imageUrl.isEmpty()}"
+                             th:src="${fragrance.imageUrl}" id="imagePreview"
+                             class="d-block w-100" alt="Fragrance image preview">
+                        <div th:unless="${fragrance.imageUrl != null and !fragrance.imageUrl.isEmpty()}"
+                             id="imagePlaceholder" class="preview-placeholder">
+                            <i class="bi bi-image text-secondary opacity-50" style="font-size:3rem"></i>
+                        </div>
+                    </div>
+                    <div class="form-text">Paste a direct image link. Right-click any online cologne image → Copy image address.</div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg me-1"></i>Save Fragrance
+                    </button>
+                    <a href="/admin/fragrances" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function updatePreview(url) {
+        const img         = document.getElementById('imagePreview');
+        const placeholder = document.getElementById('imagePlaceholder');
+        if (url && url.trim()) {
+            if (!img) {
+                const newImg = document.createElement('img');
+                newImg.id        = 'imagePreview';
+                newImg.className = 'd-block w-100';
+                newImg.alt       = 'Fragrance image preview';
+                newImg.style.cssText = 'height:180px;object-fit:contain;background:#f1f5f9;border-radius:8px';
+                document.getElementById('previewContainer').replaceChildren(newImg);
+                newImg.src = url.trim();
+            } else {
+                img.src = url.trim();
+                img.style.display = '';
+                if (placeholder) placeholder.style.display = 'none';
+            }
+        } else {
+            if (img)         img.style.display = 'none';
+            if (placeholder) placeholder.style.display = '';
+        }
+    }
+</script>
+</body>
+</html>

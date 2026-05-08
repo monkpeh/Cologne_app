@@ -3,6 +3,7 @@ package com.example.colognerecommendation.service;
 import com.example.colognerecommendation.engine.RecommendationEngine;
 import com.example.colognerecommendation.engine.RecommendationResult;
 import com.example.colognerecommendation.model.AppUser;
+import com.example.colognerecommendation.model.AppUser;
 import com.example.colognerecommendation.model.Fragrance;
 import com.example.colognerecommendation.model.Occasion;
 import com.example.colognerecommendation.model.UserStats;
@@ -10,16 +11,21 @@ import com.example.colognerecommendation.model.Weather;
 import com.example.colognerecommendation.repository.FragranceRepository;
 import com.example.colognerecommendation.repository.UserRepository;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.*;
+import java.util.stream.StreamSupport;
 
 /**
  * Central business-logic service for the Cologne Advisor application.
@@ -46,6 +52,9 @@ public class FragranceService {
     private final RecommendationEngine engine = new RecommendationEngine();
     private final FragranceRepository  fragranceRepository;
     private final UserRepository       userRepository;
+
+    @Value("${app.fragrances.json-path}")
+    private String fragrancesJsonPath;
 
     public FragranceService(FragranceRepository fragranceRepository,
                             UserRepository userRepository) {
@@ -154,6 +163,48 @@ public class FragranceService {
         fragranceRepository.deleteById(id);
     }
 
+    // ── JSON sync ─────────────────────────────────────────────────────────────
+
+    /**
+     * Re-serialises the full fragrance catalogue from the database to
+     * {@code fragrances.json}, keeping the seed file in sync with runtime edits.
+     *
+     * <p>Called automatically after every create, update, or delete so the JSON
+     * always reflects the current catalogue. If the write fails (e.g. the app is
+     * running from inside a JAR where classpath resources are not writable), the
+     * error is printed but not thrown — the database operation has already
+     * committed successfully and we don't want to roll it back for a file-sync issue.
+     *
+     * <p>Gson omits null fields by default, so fragrances that have no
+     * {@code imageUrl} or {@code description} will serialize cleanly without
+     * {@code "imageUrl": null} noise in the JSON.
+     */
+    public void syncToJson() {
+        List<Fragrance> all = getAllFragrances();
+        all.sort(Comparator.comparingInt(f -> (f.id != null ? f.id : 0)));
+        String json = new GsonBuilder().setPrettyPrinting().create().toJson(all);
+
+        // Write to src/main/resources so changes survive Maven rebuilds
+        writeJson(new File(fragrancesJsonPath), json);
+
+        // Also write to target/classes so the running app reads the updated file
+        // on next startup without requiring a separate Maven build step
+        try {
+            File classpathFile = new org.springframework.core.io.ClassPathResource("fragrances.json").getFile();
+            writeJson(classpathFile, json);
+        } catch (IOException e) {
+            System.err.println("Warning: could not sync target fragrances.json: " + e.getMessage());
+        }
+    }
+
+    private void writeJson(File file, String json) {
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write(json);
+        } catch (IOException e) {
+            System.err.println("Warning: could not write " + file.getPath() + ": " + e.getMessage());
+        }
+    }
+
     // ── User collection ───────────────────────────────────────────────────────
 
     /**
@@ -211,13 +262,24 @@ public class FragranceService {
             list = list.stream().filter(f -> !f.officeSafe).collect(Collectors.toList());
         }
 
-        Comparator<Fragrance> comparator = switch (sort) {
-            case "brand" -> Comparator.comparing(f -> f.brand);
-            case "projection" -> Comparator.comparingInt((Fragrance f) -> f.projection).reversed();
-            case "longevity" -> Comparator.comparingInt((Fragrance f) -> f.longevity).reversed();
-            case "scentFamily" -> Comparator.comparing(f -> f.scentFamily);
-            default -> Comparator.comparing(f -> f.name);
-        };
+        Comparator<Fragrance> comparator;
+        switch (sort) {
+            case "brand":
+                comparator = Comparator.comparing(f -> f.brand);
+                break;
+            case "projection":
+                comparator = Comparator.comparingInt((Fragrance f) -> f.projection).reversed();
+                break;
+            case "longevity":
+                comparator = Comparator.comparingInt((Fragrance f) -> f.longevity).reversed();
+                break;
+            case "scentFamily":
+                comparator = Comparator.comparing(f -> f.scentFamily);
+                break;
+            default:
+                comparator = Comparator.comparing(f -> f.name);
+                break;
+        }
 
         list.sort(comparator);
         return list;
@@ -334,7 +396,7 @@ public class FragranceService {
         List<Integer> ratingValues = collection.stream()
                 .filter(f -> ratings.containsKey(f.id))
                 .map(f -> ratings.get(f.id))
-                .toList();
+                .collect(Collectors.toList());
 
         int    totalRated    = ratingValues.size();
         // mapToInt + average() returns OptionalDouble; orElse(0.0) handles empty collection

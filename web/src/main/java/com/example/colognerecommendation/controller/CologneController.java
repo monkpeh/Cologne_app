@@ -253,6 +253,67 @@ public class CologneController {
      * <p>Security: only fragrances the user actually owns are resolved. This prevents
      * someone from crafting a URL with arbitrary IDs they don't own.
      */
+    // ── Submit a fragrance (user-facing) ─────────────────────────────────────
+
+    /**
+     * Renders the user-facing "Submit a Fragrance" form.
+     * Any authenticated user can access this — no ADMIN role required.
+     */
+    @GetMapping("/fragrances/new")
+    public String newFragranceForm(Model model) {
+        model.addAttribute("fragrance", new Fragrance());
+        return "fragrance_new";
+    }
+
+    /**
+     * Processes the user-submitted fragrance, saves it to the catalogue,
+     * automatically adds it to the submitter's collection, and syncs fragrances.json.
+     *
+     * <p>After saving, the new fragrance is added straight to the user's collection
+     * so they can rate and compare it immediately without a separate step.
+     */
+    @PostMapping("/fragrances/new")
+    public String submitFragrance(@RequestParam String  brand,
+                                  @RequestParam String  name,
+                                  @RequestParam String  scentFamily,
+                                  @RequestParam int     projection,
+                                  @RequestParam int     longevity,
+                                  @RequestParam int     seasonHot,
+                                  @RequestParam int     seasonCold,
+                                  @RequestParam(defaultValue = "false") boolean officeSafe,
+                                  @RequestParam(required = false) String description,
+                                  @RequestParam(required = false) String imageUrl,
+                                  Principal principal,
+                                  RedirectAttributes ra) {
+        Fragrance f = new Fragrance();
+        f.brand = brand; f.name = name; f.scentFamily = scentFamily;
+        f.projection = projection; f.longevity = longevity;
+        f.seasonHot = seasonHot; f.seasonCold = seasonCold;
+        f.officeSafe = officeSafe; f.description = description;
+        f.imageUrl = (imageUrl != null && imageUrl.isBlank()) ? null : imageUrl;
+        service.saveFragrance(f);
+        service.syncToJson();
+        // Auto-add to the submitter's collection so it's ready to rate/compare
+        service.addToCollection(f.id, principal.getName());
+        ra.addFlashAttribute("toast",
+                "'" + f.name + "' added to the catalogue and your collection!");
+        return "redirect:/add";
+    }
+
+    // ── Side-by-side comparison ───────────────────────────────────────────────
+
+    /**
+     * Renders the side-by-side fragrance comparison page.
+     *
+     * <p><b>How {@code @RequestParam List<Integer> ids} works:</b>
+     * A URL like {@code /compare?ids=1&ids=2&ids=3} contains three parameters all
+     * named "ids". Spring collects them into a {@code List<Integer>}, converting each
+     * string to an int automatically. {@code required = false} prevents a 400 error
+     * if the user navigates to /compare with no params.
+     *
+     * <p>Security: only fragrances the user actually owns are resolved. This prevents
+     * someone from crafting a URL with arbitrary IDs they don't own.
+     */
     @GetMapping("/compare")
     public String compare(
             @RequestParam(required = false) List<Integer> ids,
@@ -264,8 +325,6 @@ public class CologneController {
         String username = principal.getName();
         Set<Integer> collectionIds = service.getCollectionIds(username);
 
-        // filter keeps only IDs the user owns; map resolves each to a Fragrance;
-        // filter(Optional::isPresent) + map(Optional::get) safely unwraps the Optional
         List<Fragrance> fragrances = ids.stream()
                 .limit(3)
                 .filter(collectionIds::contains)
