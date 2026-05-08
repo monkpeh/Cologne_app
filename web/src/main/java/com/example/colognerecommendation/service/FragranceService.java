@@ -3,9 +3,9 @@ package com.example.colognerecommendation.service;
 import com.example.colognerecommendation.engine.RecommendationEngine;
 import com.example.colognerecommendation.engine.RecommendationResult;
 import com.example.colognerecommendation.model.AppUser;
-import com.example.colognerecommendation.model.AppUser;
 import com.example.colognerecommendation.model.Fragrance;
 import com.example.colognerecommendation.model.Occasion;
+import com.example.colognerecommendation.model.UserStats;
 import com.example.colognerecommendation.model.Weather;
 import com.example.colognerecommendation.repository.FragranceRepository;
 import com.example.colognerecommendation.repository.UserRepository;
@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import java.util.stream.*;
 
 /**
  * Central business-logic service for the Cologne Advisor application.
@@ -211,24 +211,13 @@ public class FragranceService {
             list = list.stream().filter(f -> !f.officeSafe).collect(Collectors.toList());
         }
 
-        Comparator<Fragrance> comparator;
-        switch (sort) {
-            case "brand":
-                comparator = Comparator.comparing(f -> f.brand);
-                break;
-            case "projection":
-                comparator = Comparator.comparingInt((Fragrance f) -> f.projection).reversed();
-                break;
-            case "longevity":
-                comparator = Comparator.comparingInt((Fragrance f) -> f.longevity).reversed();
-                break;
-            case "scentFamily":
-                comparator = Comparator.comparing(f -> f.scentFamily);
-                break;
-            default:
-                comparator = Comparator.comparing(f -> f.name);
-                break;
-        }
+        Comparator<Fragrance> comparator = switch (sort) {
+            case "brand" -> Comparator.comparing(f -> f.brand);
+            case "projection" -> Comparator.comparingInt((Fragrance f) -> f.projection).reversed();
+            case "longevity" -> Comparator.comparingInt((Fragrance f) -> f.longevity).reversed();
+            case "scentFamily" -> Comparator.comparing(f -> f.scentFamily);
+            default -> Comparator.comparing(f -> f.name);
+        };
 
         list.sort(comparator);
         return list;
@@ -320,6 +309,62 @@ public class FragranceService {
         bucket.forEach((fid, list) ->
                 averages.put(fid, list.stream().mapToInt(Integer::intValue).average().orElse(0)));
         return averages;
+    }
+
+    // ── Stats ─────────────────────────────────────────────────────────────────
+
+    /**
+     * Computes all dashboard statistics for the given user's collection.
+     *
+     * <p><b>How to read this code:</b> Every calculation is a Java stream pipeline.
+     * A stream is like an assembly line: start with a collection, apply filter/map/sort
+     * steps, and collect the result. No extra database queries are made here —
+     * we reuse {@link #getUserCollection} and {@link #getUserRatings}.
+     *
+     * @param username the authenticated principal's username
+     * @return a fully populated {@link UserStats} view model ready for the template
+     */
+    public UserStats getStats(String username) {
+        List<Fragrance>       collection = getUserCollection(username);
+        Map<Integer, Integer> ratings    = getUserRatings(username);
+
+        int totalOwned = collection.size();
+
+        // Only count ratings whose fragrance ID is still in the collection
+        List<Integer> ratingValues = collection.stream()
+                .filter(f -> ratings.containsKey(f.id))
+                .map(f -> ratings.get(f.id))
+                .toList();
+
+        int    totalRated    = ratingValues.size();
+        // mapToInt + average() returns OptionalDouble; orElse(0.0) handles empty collection
+        double averageRating = ratingValues.stream()
+                .mapToInt(Integer::intValue).average().orElse(0.0);
+
+        // groupingBy partitions the list into buckets keyed by scent family name;
+        // counting() produces a Long count for each bucket → Map<String, Long>
+        Map<String, Long> familyCounts = collection.stream()
+                .collect(Collectors.groupingBy(f -> f.scentFamily, Collectors.counting()));
+
+        long officeSafeCount = collection.stream().filter(f ->  f.officeSafe).count();
+        long casualCount     = collection.stream().filter(f -> !f.officeSafe).count();
+
+        // Fragrances the user has rated 4 or 5 stars, best first
+        List<Fragrance> topRated = collection.stream()
+                .filter(f -> ratings.getOrDefault(f.id, 0) >= 4)
+                .sorted(Comparator.comparingInt(
+                        (Fragrance f) -> ratings.getOrDefault(f.id, 0)).reversed())
+                .collect(Collectors.toList());
+
+        // max() returns Optional because the stream might be empty (empty collection)
+        Fragrance mostProjecting = collection.stream()
+                .max(Comparator.comparingInt(f -> f.projection)).orElse(null);
+        Fragrance longestLasting = collection.stream()
+                .max(Comparator.comparingInt(f -> f.longevity)).orElse(null);
+
+        return new UserStats(totalOwned, totalRated, averageRating, familyCounts,
+                (int) officeSafeCount, (int) casualCount,
+                topRated, mostProjecting, longestLasting);
     }
 
     // ── Suggestions ───────────────────────────────────────────────────────────

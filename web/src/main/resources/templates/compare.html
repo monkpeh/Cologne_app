@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Compare – Cologne Advisor</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body { background: #f8f9fa; }
+    .navbar-brand { font-weight: 700; letter-spacing: .5px; }
+    .brand-label  { font-size: .7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .star-on  { color: #f59e0b; }
+    .star-off { color: #dee2e6; }
+    /* Label column is fixed-width; fragrance columns share remaining space equally */
+    .compare-table th.label-col { background: #f8f9fa; width: 140px; vertical-align: middle; }
+    .compare-table td { vertical-align: middle; }
+    .progress { height: 10px; }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container">
+    <a class="navbar-brand" href="/"><i class="bi bi-droplet-fill me-2"></i>Cologne Advisor</a>
+    <div class="navbar-nav ms-auto flex-row align-items-center gap-3">
+      <a class="nav-link" href="/collection"><i class="bi bi-collection me-1"></i>Collection</a>
+      <a class="nav-link" href="/add"><i class="bi bi-plus-circle me-1"></i>Add</a>
+      <a class="nav-link" href="/recommend"><i class="bi bi-stars me-1"></i>Recommend</a>
+      <a class="nav-link" href="/stats"><i class="bi bi-bar-chart me-1"></i>Stats</a>
+      <a class="nav-link" href="/admin" sec:authorize="hasRole('ADMIN')"><i class="bi bi-shield-lock me-1"></i>Admin</a>
+      <span class="navbar-text text-white-50 small" sec:authentication="name"></span>
+      <form th:action="@{/logout}" method="post" class="d-inline m-0">
+        <button class="btn btn-sm btn-outline-light">
+          <i class="bi bi-box-arrow-right me-1"></i>Sign Out
+        </button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4">
+
+  <div class="d-flex align-items-center gap-3 mb-4">
+    <a href="/collection" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left me-1"></i>Back to Collection
+    </a>
+    <h2 class="fw-bold mb-0">
+      <i class="bi bi-layout-split me-2 text-primary"></i>Fragrance Comparison
+    </h2>
+  </div>
+
+  <!--
+    TEACHING — the comparison table layout:
+
+    The table has one label column on the left and one data column per fragrance.
+    We use th:each in TWO different ways here:
+
+    1. In the <thead>, th:each="f : ${fragrances}" generates one <th> per fragrance,
+       filling the header row with fragrance names/images.
+
+    2. In each <tbody> row, th:each="f : ${fragrances}" generates one <td> per
+       fragrance, so every row automatically spans all fragrance columns.
+
+    Both loops iterate the same "fragrances" List<Fragrance> from the model.
+    Inside each loop, ${f.brand}, ${f.name}, etc. access that iteration's object —
+    exactly like Java: for (Fragrance f : fragrances) { ... }
+  -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="table-responsive">
+      <table class="table compare-table mb-0">
+
+        <!-- Header row: one column per fragrance -->
+        <thead>
+        <tr>
+          <th class="label-col ps-3 py-3"></th>
+          <!--
+            TEACHING: iterStat is an optional "status variable" you can add
+            alongside your loop variable: th:each="f, iterStat : ${fragrances}"
+            It gives you: iterStat.index (0-based), iterStat.count (1-based),
+            iterStat.first, iterStat.last. Useful for conditional first/last styling.
+            We don't need it here — just knowing it exists is useful.
+          -->
+          <th th:each="f : ${fragrances}" class="py-3 text-center">
+            <img th:if="${f.imageUrl != null and !f.imageUrl.isEmpty()}"
+                 th:src="${f.imageUrl}" th:alt="${f.name}"
+                 style="height:80px;object-fit:contain;display:block;margin:0 auto .5rem">
+            <div th:unless="${f.imageUrl != null and !f.imageUrl.isEmpty()}"
+                 class="d-flex align-items-center justify-content-center mb-2"
+                 style="height:60px">
+              <i class="bi bi-droplet-fill text-primary opacity-25" style="font-size:2rem"></i>
+            </div>
+            <p class="brand-label text-primary mb-0" th:text="${f.brand}"></p>
+            <span class="fw-bold d-block" th:text="${f.name}"></span>
+          </th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <!-- Scent Family -->
+        <tr>
+          <th class="label-col ps-3 text-muted small">Scent Family</th>
+          <!--
+            TEACHING: This th:each generates one <td> per fragrance.
+            Inside the td, ${f.scentFamily} accesses that fragrance's scent family.
+            Thymeleaf calls getScentFamily() via JavaBean reflection.
+          -->
+          <td th:each="f : ${fragrances}" class="text-center">
+            <span class="badge bg-secondary" th:text="${f.scentFamily}"></span>
+          </td>
+        </tr>
+
+        <!-- Projection -->
+        <tr>
+          <th class="label-col ps-3 text-muted small">Projection</th>
+          <td th:each="f : ${fragrances}" class="text-center">
+                            <span th:each="i : ${#numbers.sequence(1,5)}">
+                                <i th:class="${i <= f.projection}
+                                              ? 'bi bi-star-fill star-on'
+                                              : 'bi bi-star star-off'"></i>
+                            </span>
+            <!--
+              Progress bar width: projection is 1-5, so multiply by 20 to get percent.
+              th:style sets inline CSS; the expression evaluates to e.g. "width:60%"
+            -->
+            <div class="progress mt-1 mx-auto" style="max-width:100px">
+              <div class="progress-bar bg-info"
+                   th:style="'width:' + (${f.projection} * 20) + '%'"></div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Longevity -->
+        <tr>
+          <th class="label-col ps-3 text-muted small">Longevity</th>
+          <td th:each="f : ${fragrances}" class="text-center">
+                            <span th:each="i : ${#numbers.sequence(1,5)}">
+                                <i th:class="${i <= f.longevity}
+                                              ? 'bi bi-star-fill star-on'
+                                              : 'bi bi-star star-off'"></i>
+                            </span>
+            <div class="progress mt-1 mx-auto" style="max-width:100px">
+              <div class="progress-bar bg-success"
+                   th:style="'width:' + (${f.longevity} * 20) + '%'"></div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Hot Weather -->
+        <tr>
+          <th class="label-col ps-3 text-muted small">
+            <i class="bi bi-sun text-warning me-1"></i>Hot Weather
+          </th>
+          <td th:each="f : ${fragrances}" class="text-center">
+            <span class="fw-semibold" th:text="${f.seasonHot} + '/10'"></span>
+            <div class="progress mt-1 mx-auto" style="max-width:100px">
+              <div class="progress-bar bg-danger"
+                   th:style="'width:' + (${f.seasonHot} * 10) + '%'"></div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Cold Weather -->
+        <tr>
+          <th class="label-col ps-3 text-muted small">
+            <i class="bi bi-snow text-info me-1"></i>Cold Weather
+          </th>
+          <td th:each="f : ${fragrances}" class="text-center">
+            <span class="fw-semibold" th:text="${f.seasonCold} + '/10'"></span>
+            <div class="progress mt-1 mx-auto" style="max-width:100px">
+              <div class="progress-bar bg-primary"
+                   th:style="'width:' + (${f.seasonCold} * 10) + '%'"></div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Occasion -->
+        <tr>
+          <th class="label-col ps-3 text-muted small">Occasion</th>
+          <!--
+            TEACHING: th:if / th:unless on sibling elements act like if/else.
+            When f.officeSafe is true, the green badge renders; the yellow one doesn't.
+            isOfficeSafe() is called by Thymeleaf for the boolean field "officeSafe".
+          -->
+          <td th:each="f : ${fragrances}" class="text-center">
+                            <span th:if="${f.officeSafe}" class="badge bg-success">
+                                <i class="bi bi-briefcase me-1"></i>Office Safe
+                            </span>
+            <span th:unless="${f.officeSafe}" class="badge bg-warning text-dark">
+                                <i class="bi bi-moon-stars me-1"></i>Casual / Evening
+                            </span>
+          </td>
+        </tr>
+
+        <!-- My Rating -->
+        <tr class="table-light">
+          <th class="label-col ps-3 text-muted small">My Rating</th>
+          <!--
+            TEACHING: Map access in Thymeleaf SpEL.
+            "ratings" is a Map<Integer, Integer> placed in the model by the controller.
+            ratings.containsKey(f.id) calls the Java Map method directly.
+            ratings.get(f.id) retrieves the Integer star rating for this fragrance.
+            The ternary ${ratings.get(f.id) >= i} ? 'filled' : 'empty' picks the icon.
+          -->
+          <td th:each="f : ${fragrances}" class="text-center">
+                            <span th:if="${ratings.containsKey(f.id)}">
+                                <span th:each="i : ${#numbers.sequence(1,5)}">
+                                    <i th:class="${ratings.get(f.id) >= i}
+                                                  ? 'bi bi-star-fill star-on'
+                                                  : 'bi bi-star star-off'"></i>
+                                </span>
+                                <small class="d-block text-muted"
+                                       th:text="${ratings.get(f.id)} + ' / 5'"></small>
+                            </span>
+            <span th:unless="${ratings.containsKey(f.id)}"
+                  class="text-muted small">Not rated</span>
+          </td>
+        </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Description cards — one per fragrance, equal-width columns -->
+  <div class="row g-3">
+    <!--
+      TEACHING: Using th:each here inside a row generates one Bootstrap column
+      per fragrance. "col" without a number makes all columns share equal width.
+      Bootstrap calculates this automatically with flexbox.
+    -->
+    <div th:each="f : ${fragrances}" class="col">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-transparent border-0 pt-3 fw-semibold small">
+          <p class="brand-label text-primary mb-0" th:text="${f.brand}"></p>
+          <span th:text="${f.name}"></span>
+        </div>
+        <div class="card-body">
+          <!--
+            TEACHING: the ternary here checks if description is non-null before rendering.
+            ${condition} ? ${valueIfTrue} : 'fallback string'
+            Without this guard, a null description would render as the text "null".
+          -->
+          <p class="text-muted small mb-0"
+             th:text="${f.description != null and !f.description.isEmpty()}
+                                  ? ${f.description}
+                                  : 'No description available.'"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

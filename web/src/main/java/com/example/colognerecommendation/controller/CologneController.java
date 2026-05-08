@@ -1,5 +1,6 @@
 package com.example.colognerecommendation.controller;
 
+import com.example.colognerecommendation.model.Fragrance;
 import com.example.colognerecommendation.model.Occasion;
 import com.example.colognerecommendation.model.Weather;
 import com.example.colognerecommendation.service.FragranceService;
@@ -9,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Handles the three main user-facing pages: Collection, Add, and Recommend.
@@ -207,5 +212,72 @@ public class CologneController {
         model.addAttribute("selectedOccasion", occasion);
         model.addAttribute("collectionEmpty",  service.getUserCollection(principal.getName()).isEmpty());
         return "recommend";
+    }
+
+    // ── Stats dashboard ───────────────────────────────────────────────────────
+
+    /**
+     * Renders the personal stats dashboard.
+     *
+     * <p><b>How it works (MVC flow):</b>
+     * <ol>
+     *   <li>Spring calls this method when the browser requests GET /stats</li>
+     *   <li>{@code principal.getName()} returns the logged-in username</li>
+     *   <li>The service crunches the numbers and returns a {@code UserStats} object</li>
+     *   <li>{@code model.addAttribute("stats", ...)} places it in a map keyed "stats"</li>
+     *   <li>Thymeleaf reads {@code ${stats.totalOwned}} by calling {@code getTotalOwned()}</li>
+     * </ol>
+     *
+     * <p>We also add the raw {@code ratings} map separately because the top-rated section
+     * in the template needs to render star icons per fragrance, not just the computed count.
+     */
+    @GetMapping("/stats")
+    public String stats(Principal principal, Model model) {
+        String username = principal.getName();
+        model.addAttribute("stats",   service.getStats(username));
+        model.addAttribute("ratings", service.getUserRatings(username));
+        return "stats";
+    }
+
+    // ── Side-by-side comparison ───────────────────────────────────────────────
+
+    /**
+     * Renders the side-by-side fragrance comparison page.
+     *
+     * <p><b>How {@code @RequestParam List<Integer> ids} works:</b>
+     * A URL like {@code /compare?ids=1&ids=2&ids=3} contains three parameters all
+     * named "ids". Spring collects them into a {@code List<Integer>}, converting each
+     * string to an int automatically. {@code required = false} prevents a 400 error
+     * if the user navigates to /compare with no params.
+     *
+     * <p>Security: only fragrances the user actually owns are resolved. This prevents
+     * someone from crafting a URL with arbitrary IDs they don't own.
+     */
+    @GetMapping("/compare")
+    public String compare(
+            @RequestParam(required = false) List<Integer> ids,
+            Principal principal,
+            Model model) {
+
+        if (ids == null || ids.size() < 2) return "redirect:/collection";
+
+        String username = principal.getName();
+        Set<Integer> collectionIds = service.getCollectionIds(username);
+
+        // filter keeps only IDs the user owns; map resolves each to a Fragrance;
+        // filter(Optional::isPresent) + map(Optional::get) safely unwraps the Optional
+        List<Fragrance> fragrances = ids.stream()
+                .limit(3)
+                .filter(collectionIds::contains)
+                .map(service::findFragranceById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+
+        if (fragrances.size() < 2) return "redirect:/collection";
+
+        model.addAttribute("fragrances", fragrances);
+        model.addAttribute("ratings",    service.getUserRatings(username));
+        return "compare";
     }
 }

@@ -22,6 +22,7 @@
             <a class="nav-link" href="/collection"><i class="bi bi-collection me-1"></i>Collection</a>
             <a class="nav-link" href="/add"><i class="bi bi-plus-circle me-1"></i>Add</a>
             <a class="nav-link" href="/recommend"><i class="bi bi-stars me-1"></i>Recommend</a>
+            <a class="nav-link" href="/stats"><i class="bi bi-bar-chart me-1"></i>Stats</a>
             <a class="nav-link active fw-semibold" href="/admin"><i class="bi bi-shield-lock me-1"></i>Admin</a>
             <span class="navbar-text text-white-50 small" sec:authentication="name"></span>
             <form th:action="@{/logout}" method="post" class="d-inline m-0">
@@ -57,65 +58,65 @@
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
-                        <tr>
-                            <th class="ps-4">Username</th>
-                            <th>Role</th>
-                            <th>Collection</th>
-                            <th class="text-end pe-4">Actions</th>
-                        </tr>
+                    <tr>
+                        <th class="ps-4">Username</th>
+                        <th>Role</th>
+                        <th>Collection</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="u : ${users}">
-                            <td class="ps-4 fw-semibold">
-                                <i class="bi bi-person-circle me-2 text-muted"></i>
-                                <span th:text="${u.username}"></span>
-                                <span th:if="${#authentication.name == u.username}"
-                                      class="badge bg-light text-secondary ms-1">you</span>
-                            </td>
-                            <td>
+                    <tr th:each="u : ${users}">
+                        <td class="ps-4 fw-semibold">
+                            <i class="bi bi-person-circle me-2 text-muted"></i>
+                            <span th:text="${u.username}"></span>
+                            <span th:if="${#authentication.name == u.username}"
+                                  class="badge bg-light text-secondary ms-1">you</span>
+                        </td>
+                        <td>
                                 <span th:if="${u.role == 'ADMIN'}"  class="badge bg-primary">
                                     <i class="bi bi-shield-fill me-1"></i>Admin
                                 </span>
-                                <span th:unless="${u.role == 'ADMIN'}" class="badge bg-secondary">
+                            <span th:unless="${u.role == 'ADMIN'}" class="badge bg-secondary">
                                     <i class="bi bi-person me-1"></i>User
                                 </span>
-                            </td>
-                            <td>
-                                <span class="text-muted" th:text="${u.collectionIds.size()} + ' fragrances'"></span>
-                            </td>
-                            <td class="text-end pe-4">
-                                <div class="d-flex justify-content-end gap-2">
+                        </td>
+                        <td>
+                            <span class="text-muted" th:text="${u.collectionIds.size()} + ' fragrances'"></span>
+                        </td>
+                        <td class="text-end pe-4">
+                            <div class="d-flex justify-content-end gap-2">
 
-                                    <!-- Reset password button → opens modal -->
-                                    <button class="btn btn-sm btn-outline-secondary"
-                                            data-bs-toggle="modal"
-                                            th:attr="data-bs-target='#resetModal' + ${u.id}">
-                                        <i class="bi bi-key me-1"></i>Reset Password
+                                <!-- Reset password button → opens modal -->
+                                <button class="btn btn-sm btn-outline-secondary"
+                                        data-bs-toggle="modal"
+                                        th:attr="data-bs-target='#resetModal' + ${u.id}">
+                                    <i class="bi bi-key me-1"></i>Reset Password
+                                </button>
+
+                                <!-- Toggle role — disabled for self -->
+                                <form th:action="@{/admin/toggle-role/{id}(id=${u.id})}" method="post">
+                                    <button class="btn btn-sm btn-outline-primary"
+                                            th:disabled="${#authentication.name == u.username}"
+                                            th:title="${u.role == 'ADMIN'} ? 'Demote to User' : 'Promote to Admin'">
+                                        <i class="bi bi-arrow-repeat me-1"></i>
+                                        <span th:text="${u.role == 'ADMIN'} ? 'Demote' : 'Promote'"></span>
                                     </button>
+                                </form>
 
-                                    <!-- Toggle role — disabled for self -->
-                                    <form th:action="@{/admin/toggle-role/{id}(id=${u.id})}" method="post">
-                                        <button class="btn btn-sm btn-outline-primary"
-                                                th:disabled="${#authentication.name == u.username}"
-                                                th:title="${u.role == 'ADMIN'} ? 'Demote to User' : 'Promote to Admin'">
-                                            <i class="bi bi-arrow-repeat me-1"></i>
-                                            <span th:text="${u.role == 'ADMIN'} ? 'Demote' : 'Promote'"></span>
-                                        </button>
-                                    </form>
+                                <!-- Delete — disabled for self -->
+                                <form th:action="@{/admin/delete/{id}(id=${u.id})}" method="post">
+                                    <button class="btn btn-sm btn-outline-danger"
+                                            th:disabled="${#authentication.name == u.username}"
+                                            th:data-name="${u.username}"
+                                            onclick="return confirm('Delete ' + this.dataset.name + '? This cannot be undone.')">
+                                        <i class="bi bi-trash me-1"></i>Delete
+                                    </button>
+                                </form>
 
-                                    <!-- Delete — disabled for self -->
-                                    <form th:action="@{/admin/delete/{id}(id=${u.id})}" method="post">
-                                        <button class="btn btn-sm btn-outline-danger"
-                                                th:disabled="${#authentication.name == u.username}"
-                                                th:data-name="${u.username}"
-                                                onclick="return confirm('Delete ' + this.dataset.name + '? This cannot be undone.')">
-                                            <i class="bi bi-trash me-1"></i>Delete
-                                        </button>
-                                    </form>
-
-                                </div>
-                            </td>
-                        </tr>
+                            </div>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>

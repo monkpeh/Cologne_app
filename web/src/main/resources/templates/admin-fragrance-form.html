@@ -25,6 +25,7 @@
             <a class="nav-link" href="/collection"><i class="bi bi-collection me-1"></i>Collection</a>
             <a class="nav-link" href="/add"><i class="bi bi-plus-circle me-1"></i>Add</a>
             <a class="nav-link" href="/recommend"><i class="bi bi-stars me-1"></i>Recommend</a>
+            <a class="nav-link" href="/stats"><i class="bi bi-bar-chart me-1"></i>Stats</a>
             <a class="nav-link active fw-semibold" href="/admin"><i class="bi bi-shield-lock me-1"></i>Admin</a>
             <span class="navbar-text text-white-50 small" sec:authentication="name"></span>
             <form th:action="@{/logout}" method="post" class="d-inline m-0">
@@ -140,28 +141,28 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-function updatePreview(url) {
-    const img         = document.getElementById('imagePreview');
-    const placeholder = document.getElementById('imagePlaceholder');
-    if (url && url.trim()) {
-        if (!img) {
-            const newImg = document.createElement('img');
-            newImg.id        = 'imagePreview';
-            newImg.className = 'd-block w-100';
-            newImg.alt       = 'Fragrance image preview';
-            newImg.style.cssText = 'height:180px;object-fit:contain;background:#f1f5f9;border-radius:8px';
-            document.getElementById('previewContainer').replaceChildren(newImg);
-            newImg.src = url.trim();
+    function updatePreview(url) {
+        const img         = document.getElementById('imagePreview');
+        const placeholder = document.getElementById('imagePlaceholder');
+        if (url && url.trim()) {
+            if (!img) {
+                const newImg = document.createElement('img');
+                newImg.id        = 'imagePreview';
+                newImg.className = 'd-block w-100';
+                newImg.alt       = 'Fragrance image preview';
+                newImg.style.cssText = 'height:180px;object-fit:contain;background:#f1f5f9;border-radius:8px';
+                document.getElementById('previewContainer').replaceChildren(newImg);
+                newImg.src = url.trim();
+            } else {
+                img.src = url.trim();
+                img.style.display = '';
+                if (placeholder) placeholder.style.display = 'none';
+            }
         } else {
-            img.src = url.trim();
-            img.style.display = '';
-            if (placeholder) placeholder.style.display = 'none';
+            if (img)         img.style.display = 'none';
+            if (placeholder) placeholder.style.display = '';
         }
-    } else {
-        if (img)         img.style.display = 'none';
-        if (placeholder) placeholder.style.display = '';
     }
-}
 </script>
 </body>
 </html>
