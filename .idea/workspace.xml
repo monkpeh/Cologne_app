@@ -5,16 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="baa64534-eeef-4244-a0d8-64ef1ca103ed" name="Changes" comment="Added a compare and stat page for different fragrance">
-      <change afterPath="$PROJECT_DIR$/web/src/main/resources/templates/fragrance_new.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/cologne-app.mv.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/CologneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/CologneController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/service/FragranceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/service/FragranceService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/add.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/admin-fragrance-form.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/admin_fragrance_form.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/admin-fragrances.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/admin_fragrances.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
