@@ -3,7 +3,6 @@ package com.example.colognerecommendation.service;
 import com.example.colognerecommendation.engine.RecommendationEngine;
 import com.example.colognerecommendation.engine.RecommendationResult;
 import com.example.colognerecommendation.model.AppUser;
-import com.example.colognerecommendation.model.AppUser;
 import com.example.colognerecommendation.model.Fragrance;
 import com.example.colognerecommendation.model.Occasion;
 import com.example.colognerecommendation.model.UserStats;
@@ -25,7 +24,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * Central business-logic service for the Cologne Advisor application.

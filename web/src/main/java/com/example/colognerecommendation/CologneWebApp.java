@@ -2,6 +2,7 @@ package com.example.colognerecommendation;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Entry point for the Cologne Advisor web application.

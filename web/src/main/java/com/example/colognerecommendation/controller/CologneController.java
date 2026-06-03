@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * <p>Flash attributes ({@link RedirectAttributes#addFlashAttribute}) are used to pass
  * one-time toast messages across POST → redirect → GET cycles without exposing them in the URL.
  */
-@Controller
+@RestController
 public class CologneController {
 
     private final FragranceService service;
