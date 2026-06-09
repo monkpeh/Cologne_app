@@ -498,4 +498,26 @@ public class FragranceService {
 
         return results;
     }
+
+    public List<com.example.colognerecommendation.dto.FragranceDto> getCollectionAsDtos(String username) {
+        return getUserCollection(username).stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
+    private com.example.colognerecommendation.dto.FragranceDto toDto(Fragrance f) {
+        com.example.colognerecommendation.dto.FragranceDto dto = new com.example.colognerecommendation.dto.FragranceDto();
+        dto.setId(f.id);
+        dto.setBrand(f.brand);
+        dto.setName(f.name);
+        dto.setScentFamily(f.scentFamily);
+        dto.setProjection(f.projection);
+        dto.setLongevity(f.longevity);
+        dto.setSeasonHot(f.seasonHot);
+        dto.setSeasonCold(f.seasonCold);
+        dto.setOfficeSafe(f.officeSafe);
+        dto.setDescription(f.description);
+        dto.setImageUrl(f.imageUrl);
+        return dto;
+    }
 }
