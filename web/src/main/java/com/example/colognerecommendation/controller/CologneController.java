@@ -1,18 +1,24 @@
 package com.example.colognerecommendation.controller;
 
+import com.example.colognerecommendation.config.RabbitConfig;
+import com.example.colognerecommendation.dto.RecommendationRequest;
+import com.example.colognerecommendation.dto.RecommendationResponse;
 import com.example.colognerecommendation.model.Fragrance;
 import com.example.colognerecommendation.model.Occasion;
 import com.example.colognerecommendation.model.Weather;
 import com.example.colognerecommendation.service.FragranceService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -30,9 +36,11 @@ import java.util.stream.Collectors;
 public class CologneController {
 
     private final FragranceService service;
+    private final RabbitTemplate   rabbitTemplate;
 
-    public CologneController(FragranceService service) {
-        this.service = service;
+    public CologneController(FragranceService service, RabbitTemplate rabbitTemplate) {
+        this.service        = service;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     // ── Root ──────────────────────────────────────────────────────────────────
@@ -202,15 +210,24 @@ public class CologneController {
                             @RequestParam String occasion,
                             Principal principal,
                             Model model) {
-        Weather  w = Weather.valueOf(weather);
-        Occasion o = Occasion.valueOf(occasion);
+        String username = principal.getName();
 
-        model.addAttribute("results",          service.getRecommendations(w, o, principal.getName()));
+        RecommendationRequest request = new RecommendationRequest();
+        request.setCorrelationId(UUID.randomUUID().toString());
+        request.setUsername(username);
+        request.setWeather(weather);
+        request.setOccasion(occasion);
+        request.setCollection(service.getCollectionAsDtos(username));
+
+        RecommendationResponse response = (RecommendationResponse) rabbitTemplate
+                .convertSendAndReceive(RabbitConfig.RECOMMENDATION_QUEUE, request);
+
+        model.addAttribute("results",          response != null ? response.getResults() : Collections.emptyList());
         model.addAttribute("weathers",         Weather.values());
         model.addAttribute("occasions",        Occasion.values());
         model.addAttribute("selectedWeather",  weather);
         model.addAttribute("selectedOccasion", occasion);
-        model.addAttribute("collectionEmpty",  service.getUserCollection(principal.getName()).isEmpty());
+        model.addAttribute("collectionEmpty",  service.getUserCollection(username).isEmpty());
         return "recommend";
     }
 
