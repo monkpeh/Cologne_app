@@ -36,11 +36,9 @@ import java.util.stream.Collectors;
 public class CologneController {
 
     private final FragranceService service;
-    private final RabbitTemplate   rabbitTemplate;
 
-    public CologneController(FragranceService service, RabbitTemplate rabbitTemplate) {
+    public CologneController(FragranceService service) {
         this.service        = service;
-        this.rabbitTemplate = rabbitTemplate;
     }
 
     // ── Root ──────────────────────────────────────────────────────────────────
@@ -212,15 +210,7 @@ public class CologneController {
                             Model model) {
         String username = principal.getName();
 
-        RecommendationRequest request = new RecommendationRequest();
-        request.setCorrelationId(UUID.randomUUID().toString());
-        request.setUsername(username);
-        request.setWeather(weather);
-        request.setOccasion(occasion);
-        request.setCollection(service.getCollectionAsDtos(username));
-
-        RecommendationResponse response = (RecommendationResponse) rabbitTemplate
-                .convertSendAndReceive(RabbitConfig.RECOMMENDATION_QUEUE, request);
+        RecommendationResponse response = service.getRecommendationsViaRabbit(weather, occasion, username);
 
         model.addAttribute("results",          response != null ? response.getResults() : Collections.emptyList());
         model.addAttribute("weathers",         Weather.values());

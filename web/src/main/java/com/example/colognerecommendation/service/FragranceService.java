@@ -14,6 +14,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import jakarta.annotation.PostConstruct;
+import com.example.colognerecommendation.config.RabbitConfig;
+import com.example.colognerecommendation.dto.RecommendationRequest;
+import com.example.colognerecommendation.dto.RecommendationResponse;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,14 +56,17 @@ public class FragranceService {
     private final RecommendationEngine engine = new RecommendationEngine();
     private final FragranceRepository  fragranceRepository;
     private final UserRepository       userRepository;
+    private final RabbitTemplate rabbitTemplate;
 
     @Value("${app.fragrances.json-path}")
     private String fragrancesJsonPath;
 
     public FragranceService(FragranceRepository fragranceRepository,
-                            UserRepository userRepository) {
+                            UserRepository userRepository,
+                            RabbitTemplate rabbitTemplate) {
         this.fragranceRepository = fragranceRepository;
         this.userRepository      = userRepository;
+        this.rabbitTemplate      = rabbitTemplate;
     }
 
     // ── Seeding ───────────────────────────────────────────────────────────────
@@ -510,4 +518,17 @@ public class FragranceService {
         dto.setImageUrl(f.imageUrl);
         return dto;
     }
+
+    public RecommendationResponse getRecommendationsViaRabbit(String weather, String occasion, String username) {
+        RecommendationRequest request = new RecommendationRequest();
+        request.setCorrelationId(UUID.randomUUID().toString());
+        request.setUsername(username);
+        request.setWeather(weather);
+        request.setOccasion(occasion);
+        request.setCollection(getCollectionAsDtos(username));
+
+        return (RecommendationResponse) rabbitTemplate
+                .convertSendAndReceive(RabbitConfig.RECOMMENDATION_QUEUE, request);
+    }
+
 }

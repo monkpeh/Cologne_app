@@ -1,5 +1,6 @@
 package com.example.colognerecommendation.controller;
 
+import com.example.colognerecommendation.dto.RecommendationRequest;
 import com.example.colognerecommendation.engine.RecommendationResult;
 import com.example.colognerecommendation.model.AppUser;
 import com.example.colognerecommendation.model.Fragrance;
@@ -8,11 +9,15 @@ import com.example.colognerecommendation.model.Weather;
 import com.example.colognerecommendation.model.Occasion;
 import com.example.colognerecommendation.repository.UserRepository;
 import com.example.colognerecommendation.service.FragranceService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.colognerecommendation.dto.RatingRequest;
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
+import com.example.colognerecommendation.dto.RecommendationResponse;
+import com.example.colognerecommendation.dto.ScoredFragranceDto;
 
 @RestController
 @RequestMapping("/api/users")
@@ -111,10 +116,15 @@ public class UserApiController {
      * @return a list of fragrance recommendations
      */
     @GetMapping("/me/recommendations")
-    public ResponseEntity<List<RecommendationResult>> getRecommendations(
-            @RequestParam Weather weather,
-            @RequestParam Occasion occasion,
+    public ResponseEntity<List<ScoredFragranceDto>> getRecommendations(
+            @RequestParam String weather,
+            @RequestParam String occasion,
             Principal principal) {
-        return ResponseEntity.ok(service.getRecommendations(weather, occasion, principal.getName()));
+
+        String username = principal.getName();
+        RecommendationResponse response = service.getRecommendationsViaRabbit(weather, occasion, username);
+
+        List<ScoredFragranceDto> results = response != null ? response.getResults() : Collections.emptyList();
+        return ResponseEntity.ok(results);
     }
 }
