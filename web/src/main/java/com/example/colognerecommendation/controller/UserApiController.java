@@ -127,4 +127,14 @@ public class UserApiController {
         List<ScoredFragranceDto> results = response != null ? response.getResults() : Collections.emptyList();
         return ResponseEntity.ok(results);
     }
+
+    /**
+     * Retrieves fragrance suggestions for the logged-in user.
+     * @param principal the principal of the logged-in user
+     * @return a list of fragrance suggestions
+     */
+    @GetMapping("/me/suggestions")
+    public ResponseEntity<List<Fragrance>> getFragranceSuggestions(Principal principal) {
+        return ResponseEntity.ok(service.getSuggestions(principal.getName()));
+    }
 }
