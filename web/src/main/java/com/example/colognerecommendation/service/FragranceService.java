@@ -9,6 +9,7 @@ import com.example.colognerecommendation.model.UserStats;
 import com.example.colognerecommendation.model.Weather;
 import com.example.colognerecommendation.repository.FragranceRepository;
 import com.example.colognerecommendation.repository.UserRepository;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -171,7 +172,7 @@ public class FragranceService {
      * always reflects the current catalogue. If the write fails (e.g. the app is
      * running from inside a JAR where classpath resources are not writable), the
      * error is printed but not thrown — the database operation has already
-     * committed successfully and we don't want to roll it back for a file-sync issue.
+     * committed successfully, and we don't want to roll it back for a file-sync issue.
      *
      * <p>Gson omits null fields by default, so fragrances that have no
      * {@code imageUrl} or {@code description} will serialize cleanly without
@@ -260,24 +261,13 @@ public class FragranceService {
             list = list.stream().filter(f -> !f.officeSafe).collect(Collectors.toList());
         }
 
-        Comparator<Fragrance> comparator;
-        switch (sort) {
-            case "brand":
-                comparator = Comparator.comparing(f -> f.brand);
-                break;
-            case "projection":
-                comparator = Comparator.comparingInt((Fragrance f) -> f.projection).reversed();
-                break;
-            case "longevity":
-                comparator = Comparator.comparingInt((Fragrance f) -> f.longevity).reversed();
-                break;
-            case "scentFamily":
-                comparator = Comparator.comparing(f -> f.scentFamily);
-                break;
-            default:
-                comparator = Comparator.comparing(f -> f.name);
-                break;
-        }
+        Comparator<Fragrance> comparator = switch (sort) {
+            case "brand" -> Comparator.comparing(f -> f.brand);
+            case "projection" -> Comparator.comparingInt((Fragrance f) -> f.projection).reversed();
+            case "longevity" -> Comparator.comparingInt((Fragrance f) -> f.longevity).reversed();
+            case "scentFamily" -> Comparator.comparing(f -> f.scentFamily);
+            default -> Comparator.comparing(f -> f.name);
+        };
 
         list.sort(comparator);
         return list;

@@ -5,19 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="baa64534-eeef-4244-a0d8-64ef1ca103ed" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Cologne_app" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/FragranceApiController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cologne_app/web/src/main/java/com/example/colognerecommendation/dto/RatingRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/CologneWebApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/CologneWebApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/CologneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/CologneController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cologne_app" beforeDir="false" afterPath="$PROJECT_DIR$/Cologne_app" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/config/RabbitConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/config/RabbitConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/service/FragranceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/service/FragranceService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="135" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -49,6 +50,72 @@
     &quot;accountId&quot;: &quot;c12bbc16-74cf-46f6-83f5-fb5bcecd4383&quot;
   }
 }</component>
+  <component name="HttpClientOnboardingState">{
+  &quot;isOnboardingCommentShown&quot;: true
+}</component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.8801867230308482" />
+      <entry key="MS500" value="3.3371875865296023" />
+      <entry key="S2" value="6.03400781165308" />
+      <entry key="S5" value="9.271924145934326" />
+      <entry key="S10" value="15.410100206778951" />
+      <entry key="S30" value="34.238934337837186" />
+      <entry key="S60" value="50.118263133708844" />
+      <entry key="M2" value="66.86711914163772" />
+      <entry key="M5" value="91.32194869981116" />
+      <entry key="M10" value="107.36835638610941" />
+      <entry key="M15" value="114.3985374893901" />
+      <entry key="M30" value="122.53911478729023" />
+      <entry key="H1" value="127.09546667723839" />
+      <entry key="H2" value="130.22081958300544" />
+      <entry key="H4" value="140.89248568958982" />
+      <entry key="D1" value="271.637037338433" />
+      <entry key="W1" value="413.17914363520293" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="6.002422220455042E-246" />
+      <entry key="M2" value="3.635859852672391E-123" />
+      <entry key="M5" value="1.9430988694354322E-49" />
+      <entry key="M10" value="7.563031269498489E-25" />
+      <entry key="M15" value="1.1946271736819002E-16" />
+      <entry key="M30" value="1.8910479006171594E-8" />
+      <entry key="H1" value="2.3833432367918397E-4" />
+      <entry key="H2" value="0.02811688192876903" />
+      <entry key="H4" value="0.39496932848458177" />
+      <entry key="D1" value="6.865048929438203" />
+      <entry key="W1" value="24.78648032219575" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="1.7939477879107872" />
+      <entry key="MS500" value="3.2997096615607613" />
+      <entry key="S2" value="6.013837165223006" />
+      <entry key="S5" value="9.259010521135812" />
+      <entry key="S10" value="15.399091976399516" />
+      <entry key="S30" value="34.230658905885015" />
+      <entry key="S60" value="50.112247304645145" />
+      <entry key="M2" value="66.86315522597295" />
+      <entry key="M5" value="91.31983673512423" />
+      <entry key="M10" value="107.36713312889017" />
+      <entry key="M15" value="114.39767359021519" />
+      <entry key="M30" value="122.53865496070347" />
+      <entry key="H1" value="127.09546628405923" />
+      <entry key="H2" value="130.2487565643462" />
+      <entry key="H4" value="141.2870453199714" />
+      <entry key="D1" value="278.5014071520151" />
+      <entry key="W1" value="437.9653465608023" />
+    </decayedShown>
+  </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -61,30 +128,55 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Run",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "Spring Boot.CologneWebApp.executor": "Run",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "Rest-Api",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "settings.sync"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;HTTP Request.generated-requests | #1.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #2.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #3.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #4.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #6.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;Spring Boot.CologneWebApp.executor&quot;: &quot;Run&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Rest-Api&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.tools&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/IntelliJ IDEA.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;TEXT&quot;
+    ]
   }
-}]]></component>
-  <component name="RunManager">
+}</component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.example.colognerecommendation" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Cologne_app/web/src/main/java/com/example/colognerecommendation" />
+      <recent name="$PROJECT_DIR$/Cologne_app/web/src/main/java/com/example/colognerecommendation/engine" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="temurin-25" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -94,6 +186,58 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="generated-requests | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" executionIdentifier="#1" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="generated-requests | #2" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" executionIdentifier="#2" index="2" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="generated-requests | #3" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" executionIdentifier="#3" index="3" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="generated-requests | #4" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" executionIdentifier="#4" index="4" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="generated-requests | #6" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" executionIdentifier="#6" index="6" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="CologneWebApp" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="cologne-web" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.colognerecommendation.CologneWebApp" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="HTTP Request.generated-requests | #1" />
+      <item itemvalue="HTTP Request.generated-requests | #2" />
+      <item itemvalue="HTTP Request.generated-requests | #3" />
+      <item itemvalue="HTTP Request.generated-requests | #4" />
+      <item itemvalue="HTTP Request.generated-requests | #6" />
+      <item itemvalue="Spring Boot.CologneWebApp" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="HTTP Request.generated-requests | #6" />
+        <item itemvalue="HTTP Request.generated-requests | #4" />
+        <item itemvalue="HTTP Request.generated-requests | #1" />
+        <item itemvalue="HTTP Request.generated-requests | #2" />
+        <item itemvalue="HTTP Request.generated-requests | #3" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-37e91769500f-intellij.indexing.shared.core-IU-261.25134.95" />
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-IU-261.25134.95" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="StructureViewState">
+    <option name="selectedTab" value="Logical" />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -102,6 +246,10 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1778111526183</updated>
+      <workItem from="1780503712616" duration="8190000" />
+      <workItem from="1780513385667" duration="3844000" />
+      <workItem from="1780540757682" duration="21262000" />
+      <workItem from="1781052145942" duration="5291000" />
     </task>
     <task id="LOCAL-00001" summary="rating and suggestion">
       <option name="closed" value="true" />
@@ -133,5 +281,19 @@
     <MESSAGE value="Rating and suggestion" />
     <MESSAGE value="Added a compare and stat page for different fragrance" />
     <option name="LAST_COMMIT_MESSAGE" value="Added a compare and stat page for different fragrance" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.IllegalArgumentException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
