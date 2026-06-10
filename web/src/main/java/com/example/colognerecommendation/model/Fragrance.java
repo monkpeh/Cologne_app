@@ -1,5 +1,6 @@
 package com.example.colognerecommendation.model;
 
+import jakarta.validation.constraints.*;
 import jakarta.persistence.*;
 
 /**
@@ -29,42 +30,54 @@ public class Fragrance {
     public Integer id;
 
     /** Manufacturer or fashion house name (e.g. "Dior"). */
+    @NotBlank(message = "Brand cannot be empty")
     public String brand;
 
     /** Commercial name of the fragrance (e.g. "Sauvage"). */
+    @NotBlank(message = "Name cannot be empty")
     public String name;
 
     /** Olfactive family classification (e.g. "Fresh / Spicy", "Oriental / Woody"). */
+    @NotBlank(message = "Scent family cannot be empty")
     public String scentFamily;
 
     /**
      * How far the scent projects from the skin, rated 1 (skin-close) to 5 (beast mode).
      * Used by the recommendation engine to evaluate office and social suitability.
      */
+    @Min(value = 1, message = "Projection must be between 1 and 5")
+    @Max(value = 5, message = "Projection must be between 1 and 5")
     public int projection;
 
     /**
      * How many hours the scent lasts before fading significantly, rated 1 (2–3 h) to 5 (12 h+).
      * Contributes 20 % of the total recommendation score as a practical tiebreaker.
      */
+    @Min(value = 1, message = "Longevity must be between 1 and 5")
+    @Max(value = 5, message = "Longevity must be between 1 and 5")
     public int longevity;
 
     /**
      * Suitability for hot weather on a scale of 0 (avoid) to 10 (perfect).
      * Used directly for HOT weather scoring and blended for WARM and MILD.
      */
+    @Min(value = 0, message = "Season hot must be between 0 and 10")
+    @Max(value = 10, message = "Season hot must be between 0 and 10")
     public int seasonHot;
 
     /**
      * Suitability for cold weather on a scale of 0 (avoid) to 10 (perfect).
      * Used directly for COLD weather scoring and blended for COOL and MILD.
      */
+    @Min(value = 0, message = "Season cold must be between 0 and 10")
+    @Max(value = 10, message = "Season cold must be between 0 and 10")
     public int seasonCold;
 
     /**
      * Whether this fragrance is considered appropriate for a professional office environment.
      * Typically true for light, low-projection, inoffensive scents.
      */
+
     public boolean officeSafe;
 
     /** Short description of the fragrance's character and notable notes. */

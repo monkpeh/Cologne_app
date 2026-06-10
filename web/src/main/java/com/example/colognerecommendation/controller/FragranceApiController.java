@@ -4,9 +4,11 @@ import com.example.colognerecommendation.model.Fragrance;
 import com.example.colognerecommendation.service.FragranceService;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.constraints.*;
 import java.util.*;
 
 @RestController
@@ -62,6 +64,7 @@ public class FragranceApiController {
      * @param id the ID of the fragrance to delete
      * @return a 200 response on success or 404 if the fragrance is not found
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFragrance(@PathVariable int id) {
         service.deleteFragrance(id);
@@ -74,8 +77,9 @@ public class FragranceApiController {
      * @param fragrance the fragrance to add
      * @return the added fragrance or 404 if the fragrance is not found
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Fragrance> addFragrance(@RequestBody Fragrance fragrance) {
+    public ResponseEntity<Fragrance> addFragrance(@Valid @RequestBody Fragrance fragrance) {
         service.saveFragrance(fragrance);
         service.syncToJson();
         return ResponseEntity.ok(fragrance);
@@ -87,8 +91,9 @@ public class FragranceApiController {
      * @param fragrance
      * @return the updated fragrance or 404 if the fragrance is not found
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<Fragrance> updateFragrance(@PathVariable int id, @RequestBody Fragrance fragrance) {
+    public ResponseEntity<Fragrance> updateFragrance(@PathVariable int id, @Valid @RequestBody Fragrance fragrance) {
         return service.findFragranceById(id)
                 .map(existing -> {
                     fragrance.id = id;
