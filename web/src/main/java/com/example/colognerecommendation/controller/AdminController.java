@@ -202,7 +202,8 @@ public class AdminController {
         f.brand = brand; f.name = name; f.scentFamily = scentFamily;
         f.projection = projection; f.longevity = longevity;
         f.seasonHot = seasonHot; f.seasonCold = seasonCold;
-        f.officeSafe = officeSafe; f.description = description; f.imageUrl = imageUrl;
+        f.officeSafe = officeSafe; f.description = description;
+        f.imageUrl = (imageUrl != null && imageUrl.isBlank()) ? null : imageUrl;
         fragranceService.saveFragrance(f);
         fragranceService.syncToJson();
         ra.addFlashAttribute("toast", "Fragrance '" + f.name + "' added.");
@@ -267,7 +268,8 @@ public class AdminController {
         f.brand = brand; f.name = name; f.scentFamily = scentFamily;
         f.projection = projection; f.longevity = longevity;
         f.seasonHot = seasonHot; f.seasonCold = seasonCold;
-        f.officeSafe = officeSafe; f.description = description; f.imageUrl = imageUrl;
+        f.officeSafe = officeSafe; f.description = description;
+        f.imageUrl = (imageUrl != null && imageUrl.isBlank()) ? null : imageUrl;
         fragranceService.saveFragrance(f);
         fragranceService.syncToJson();
         ra.addFlashAttribute("toast", "Fragrance '" + f.name + "' updated.");

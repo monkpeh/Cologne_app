@@ -105,7 +105,7 @@ public class AuthController {
         AppUser user = new AppUser();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
-        user.setRole(userRepository.count() == 0 ? "ADMIN" : "USER");
+        user.setRole("USER");
         userRepository.save(user);
         ra.addFlashAttribute("successMsg", "Account created! Please sign in.");
         return "redirect:/login";

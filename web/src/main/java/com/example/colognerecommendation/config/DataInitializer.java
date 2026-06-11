@@ -53,8 +53,7 @@ public class DataInitializer {
      */
     @PostConstruct
     public void seedAdminUser() {
-        if (userRepository.count() > 0) return;
-
+        if (userRepository.existsByUsername(adminUsername)) return;
         AppUser admin = new AppUser();
         admin.setUsername(adminUsername);
         admin.setPassword(passwordEncoder.encode(adminPassword));

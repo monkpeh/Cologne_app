@@ -5,9 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="baa64534-eeef-4244-a0d8-64ef1ca103ed" name="Changes" comment="Added RabbitConfig.java">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/app/(auth)/layout.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/app/(auth)/login/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/app/(auth)/register/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/app/(protected)/collection/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/app/(protected)/layout.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/lib/api/auth.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/lib/api/client.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/lib/api/fragrance.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/lib/api/fragrances-catalogue.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/lib/api/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/lib/providers.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/lib/store/authStores.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/recommendation-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/recommendation-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cologne_app" beforeDir="false" afterPath="$PROJECT_DIR$/Cologne_app" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/config/DataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/config/DataInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/CologneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/controller/CologneController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,7 +46,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="claude2" />
+        <entry key="$PROJECT_DIR$" value="spinOff" />
       </map>
     </option>
     <option name="RECENT_COMMON_BRANCH" value="main" />
@@ -47,6 +65,9 @@
     &quot;accountId&quot;: &quot;c12bbc16-74cf-46f6-83f5-fb5bcecd4383&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/frontend/node_modules/@types/react/index.d.ts" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="HttpClientOnboardingState">{
   &quot;isOnboardingCommentShown&quot;: true
 }</component>
@@ -56,61 +77,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.483070443170691" />
-      <entry key="MS500" value="2.6972027439796635" />
-      <entry key="S2" value="4.421015733626833" />
-      <entry key="S5" value="6.185666133915841" />
-      <entry key="S10" value="8.619028603045876" />
-      <entry key="S30" value="12.583971691008191" />
-      <entry key="S60" value="14.390608090977166" />
-      <entry key="M2" value="15.7719491017651" />
-      <entry key="M5" value="19.528248384262657" />
-      <entry key="M10" value="38.04518481943681" />
-      <entry key="M15" value="59.24053187013895" />
-      <entry key="M30" value="102.38798056420474" />
-      <entry key="H1" value="138.77095213411607" />
-      <entry key="H2" value="163.13335026385784" />
-      <entry key="H4" value="185.45611012252064" />
-      <entry key="D1" value="326.3390024011638" />
-      <entry key="W1" value="471.2801217771544" />
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0001008151446455" />
+      <entry key="S2" value="1.100203166174924" />
+      <entry key="S5" value="1.3984305012214642" />
+      <entry key="S10" value="1.6312135147645876" />
+      <entry key="S30" value="1.85781195845759" />
+      <entry key="S60" value="1.9261828513507253" />
+      <entry key="M2" value="1.9644459448007632" />
+      <entry key="M5" value="2.3392895328609558" />
+      <entry key="M10" value="4.540315614085447" />
+      <entry key="M15" value="7.0195513297759025" />
+      <entry key="M30" value="12.05639434271182" />
+      <entry key="H1" value="17.535496555832545" />
+      <entry key="H2" value="27.230956090593615" />
+      <entry key="H4" value="54.59802073954738" />
+      <entry key="D1" value="324.95026123983814" />
+      <entry key="W1" value="604.6237562329569" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
-      <entry key="S2" value="2.7254989907266275E-257" />
-      <entry key="S5" value="2.366891828093017E-103" />
-      <entry key="S10" value="4.8650712513723945E-52" />
-      <entry key="S30" value="7.864957890107605E-18" />
-      <entry key="S60" value="2.8044532248029387E-9" />
-      <entry key="M2" value="5.2957088522717444E-5" />
-      <entry key="M5" value="0.019479133775205475" />
-      <entry key="M10" value="0.1395676673703673" />
-      <entry key="M15" value="0.26906459007950995" />
-      <entry key="M30" value="0.5187143723981177" />
-      <entry key="H1" value="0.7203888830129842" />
-      <entry key="H2" value="0.8724456492711484" />
-      <entry key="H4" value="1.284527011276895" />
-      <entry key="D1" value="7.756504896925801" />
-      <entry key="W1" value="25.735255253013985" />
+      <entry key="S2" value="1.5165251873273248E-184" />
+      <entry key="S5" value="2.9671523849803273E-74" />
+      <entry key="S10" value="1.7225424189204535E-37" />
+      <entry key="S30" value="5.564037733894855E-13" />
+      <entry key="S60" value="7.462669401852226E-7" />
+      <entry key="M2" value="8.821690901132824E-4" />
+      <entry key="M5" value="0.07229289965308726" />
+      <entry key="M10" value="0.35702673670154356" />
+      <entry key="M15" value="0.6244879583149708" />
+      <entry key="M30" value="1.137134514890855" />
+      <entry key="H1" value="1.9056931798430237" />
+      <entry key="H2" value="3.6594925578108874" />
+      <entry key="H4" value="6.582358733864662" />
+      <entry key="D1" value="18.555791663973032" />
+      <entry key="W1" value="40.429506257957875" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.3762117387930022" />
-      <entry key="MS500" value="2.621221776220342" />
-      <entry key="S2" value="4.392345120795948" />
-      <entry key="S5" value="6.171542069020457" />
-      <entry key="S10" value="8.610320117843367" />
-      <entry key="S30" value="12.580184137839074" />
-      <entry key="S60" value="14.388489948611635" />
-      <entry key="M2" value="15.770841613948383" />
-      <entry key="M5" value="19.547015452916032" />
-      <entry key="M10" value="38.18371758859672" />
-      <entry key="M15" value="59.508411326874004" />
-      <entry key="M30" value="102.90561740655272" />
-      <entry key="H1" value="139.49060316159085" />
-      <entry key="H2" value="164.00531373915987" />
-      <entry key="H4" value="186.74008217773778" />
-      <entry key="D1" value="334.0948059273566" />
-      <entry key="W1" value="497.01509561368965" />
+      <entry key="MS100" value="0.6070974421975234" />
+      <entry key="MS500" value="0.90510104978854" />
+      <entry key="S2" value="1.0739738166342" />
+      <entry key="S5" value="1.3859661408688493" />
+      <entry key="S10" value="1.624225883095089" />
+      <entry key="S30" value="1.8552385679070607" />
+      <entry key="S60" value="1.9248601081412497" />
+      <entry key="M2" value="1.964653702354346" />
+      <entry key="M5" value="2.41118825233177" />
+      <entry key="M10" value="4.896843452456922" />
+      <entry key="M15" value="7.643497091767771" />
+      <entry key="M30" value="13.193036243472681" />
+      <entry key="H1" value="19.440634628777502" />
+      <entry key="H2" value="30.889517946797042" />
+      <entry key="H4" value="61.17908420984989" />
+      <entry key="D1" value="343.5048829984495" />
+      <entry key="W1" value="645.0528612873297" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -125,51 +146,52 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;HTTP Request.generated-requests | #1.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.generated-requests | #2.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.generated-requests | #3.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.generated-requests | #4.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.generated-requests | #6.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;Spring Boot.CologneWebApp.executor&quot;: &quot;Run&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;spinOff&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/monkpehjk/IdeaProjects/Cologne_app&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.tools&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Applications/IntelliJ IDEA.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "HTTP Request.generated-requests | #1.executor": "Run",
+    "HTTP Request.generated-requests | #2.executor": "Run",
+    "HTTP Request.generated-requests | #3.executor": "Run",
+    "HTTP Request.generated-requests | #4.executor": "Run",
+    "HTTP Request.generated-requests | #6.executor": "Run",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.CologneWebApp.executor": "Run",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "Rest-Api",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/monkpehjk/IdeaProjects/Cologne_app",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "configurable.group.tools",
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "/Users/monkpehjk/IdeaProjects/Cologne_app/frontend/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;TEXT&quot;
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "TEXT"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.example.colognerecommendation" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/frontend/app/(auth)/login" />
       <recent name="$PROJECT_DIR$/Cologne_app/web/src/main/java/com/example/colognerecommendation" />
       <recent name="$PROJECT_DIR$/Cologne_app/web/src/main/java/com/example/colognerecommendation/engine" />
     </key>
@@ -310,6 +332,12 @@
           <properties class="java.lang.IllegalArgumentException" package="java.lang" />
           <option name="timeStamp" value="1" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/frontend/app/(protected)/collection/page.tsx</url>
+          <line>59</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
