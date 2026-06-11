@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="baa64534-eeef-4244-a0d8-64ef1ca103ed" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Cologne_app/web/src/main/java/com/example/colognerecommendation/dto/RatingRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="baa64534-eeef-4244-a0d8-64ef1ca103ed" name="Changes" comment="Added RabbitConfig.java">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cologne_app" beforeDir="false" afterPath="$PROJECT_DIR$/Cologne_app" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/config/RabbitConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/config/RabbitConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/service/FragranceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/example/colognerecommendation/service/FragranceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recommendation-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/recommendation-service/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,7 +15,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="135" />
+    <option name="cachedIndexableFilesCount" value="354" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -59,61 +56,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.8801867230308482" />
-      <entry key="MS500" value="3.3371875865296023" />
-      <entry key="S2" value="6.03400781165308" />
-      <entry key="S5" value="9.271924145934326" />
-      <entry key="S10" value="15.410100206778951" />
-      <entry key="S30" value="34.238934337837186" />
-      <entry key="S60" value="50.118263133708844" />
-      <entry key="M2" value="66.86711914163772" />
-      <entry key="M5" value="91.32194869981116" />
-      <entry key="M10" value="107.36835638610941" />
-      <entry key="M15" value="114.3985374893901" />
-      <entry key="M30" value="122.53911478729023" />
-      <entry key="H1" value="127.09546667723839" />
-      <entry key="H2" value="130.22081958300544" />
-      <entry key="H4" value="140.89248568958982" />
-      <entry key="D1" value="271.637037338433" />
-      <entry key="W1" value="413.17914363520293" />
+      <entry key="MS100" value="1.483070443170691" />
+      <entry key="MS500" value="2.6972027439796635" />
+      <entry key="S2" value="4.421015733626833" />
+      <entry key="S5" value="6.185666133915841" />
+      <entry key="S10" value="8.619028603045876" />
+      <entry key="S30" value="12.583971691008191" />
+      <entry key="S60" value="14.390608090977166" />
+      <entry key="M2" value="15.7719491017651" />
+      <entry key="M5" value="19.528248384262657" />
+      <entry key="M10" value="38.04518481943681" />
+      <entry key="M15" value="59.24053187013895" />
+      <entry key="M30" value="102.38798056420474" />
+      <entry key="H1" value="138.77095213411607" />
+      <entry key="H2" value="163.13335026385784" />
+      <entry key="H4" value="185.45611012252064" />
+      <entry key="D1" value="326.3390024011638" />
+      <entry key="W1" value="471.2801217771544" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
-      <entry key="S2" value="0.0" />
-      <entry key="S5" value="0.0" />
-      <entry key="S10" value="0.0" />
-      <entry key="S30" value="0.0" />
-      <entry key="S60" value="6.002422220455042E-246" />
-      <entry key="M2" value="3.635859852672391E-123" />
-      <entry key="M5" value="1.9430988694354322E-49" />
-      <entry key="M10" value="7.563031269498489E-25" />
-      <entry key="M15" value="1.1946271736819002E-16" />
-      <entry key="M30" value="1.8910479006171594E-8" />
-      <entry key="H1" value="2.3833432367918397E-4" />
-      <entry key="H2" value="0.02811688192876903" />
-      <entry key="H4" value="0.39496932848458177" />
-      <entry key="D1" value="6.865048929438203" />
-      <entry key="W1" value="24.78648032219575" />
+      <entry key="S2" value="2.7254989907266275E-257" />
+      <entry key="S5" value="2.366891828093017E-103" />
+      <entry key="S10" value="4.8650712513723945E-52" />
+      <entry key="S30" value="7.864957890107605E-18" />
+      <entry key="S60" value="2.8044532248029387E-9" />
+      <entry key="M2" value="5.2957088522717444E-5" />
+      <entry key="M5" value="0.019479133775205475" />
+      <entry key="M10" value="0.1395676673703673" />
+      <entry key="M15" value="0.26906459007950995" />
+      <entry key="M30" value="0.5187143723981177" />
+      <entry key="H1" value="0.7203888830129842" />
+      <entry key="H2" value="0.8724456492711484" />
+      <entry key="H4" value="1.284527011276895" />
+      <entry key="D1" value="7.756504896925801" />
+      <entry key="W1" value="25.735255253013985" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.7939477879107872" />
-      <entry key="MS500" value="3.2997096615607613" />
-      <entry key="S2" value="6.013837165223006" />
-      <entry key="S5" value="9.259010521135812" />
-      <entry key="S10" value="15.399091976399516" />
-      <entry key="S30" value="34.230658905885015" />
-      <entry key="S60" value="50.112247304645145" />
-      <entry key="M2" value="66.86315522597295" />
-      <entry key="M5" value="91.31983673512423" />
-      <entry key="M10" value="107.36713312889017" />
-      <entry key="M15" value="114.39767359021519" />
-      <entry key="M30" value="122.53865496070347" />
-      <entry key="H1" value="127.09546628405923" />
-      <entry key="H2" value="130.2487565643462" />
-      <entry key="H4" value="141.2870453199714" />
-      <entry key="D1" value="278.5014071520151" />
-      <entry key="W1" value="437.9653465608023" />
+      <entry key="MS100" value="1.3762117387930022" />
+      <entry key="MS500" value="2.621221776220342" />
+      <entry key="S2" value="4.392345120795948" />
+      <entry key="S5" value="6.171542069020457" />
+      <entry key="S10" value="8.610320117843367" />
+      <entry key="S30" value="12.580184137839074" />
+      <entry key="S60" value="14.388489948611635" />
+      <entry key="M2" value="15.770841613948383" />
+      <entry key="M5" value="19.547015452916032" />
+      <entry key="M10" value="38.18371758859672" />
+      <entry key="M15" value="59.508411326874004" />
+      <entry key="M30" value="102.90561740655272" />
+      <entry key="H1" value="139.49060316159085" />
+      <entry key="H2" value="164.00531373915987" />
+      <entry key="H4" value="186.74008217773778" />
+      <entry key="D1" value="334.0948059273566" />
+      <entry key="W1" value="497.01509561368965" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -145,9 +142,10 @@
     &quot;Spring Boot.CologneWebApp.executor&quot;: &quot;Run&quot;,
     &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Rest-Api&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;spinOff&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/monkpehjk/IdeaProjects/Cologne_app&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -182,6 +180,11 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="com.example.colognerecommendation.CologneWebApp" />
       <module name="cologne-web" />
+      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+        <option name="credential" />
+        <option name="region" />
+        <option name="useCurrentConnection" value="false" />
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -222,9 +225,9 @@
       <list>
         <item itemvalue="HTTP Request.generated-requests | #6" />
         <item itemvalue="HTTP Request.generated-requests | #4" />
-        <item itemvalue="HTTP Request.generated-requests | #1" />
-        <item itemvalue="HTTP Request.generated-requests | #2" />
         <item itemvalue="HTTP Request.generated-requests | #3" />
+        <item itemvalue="HTTP Request.generated-requests | #2" />
+        <item itemvalue="HTTP Request.generated-requests | #1" />
       </list>
     </recent_temporary>
   </component>
@@ -249,7 +252,8 @@
       <workItem from="1780503712616" duration="8190000" />
       <workItem from="1780513385667" duration="3844000" />
       <workItem from="1780540757682" duration="21262000" />
-      <workItem from="1781052145942" duration="5291000" />
+      <workItem from="1781052145942" duration="6363000" />
+      <workItem from="1781138069370" duration="2519000" />
     </task>
     <task id="LOCAL-00001" summary="rating and suggestion">
       <option name="closed" value="true" />
@@ -259,7 +263,23 @@
       <option name="project" value="LOCAL" />
       <updated>1778119566364</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added RabbitConfig.java">
+      <option name="closed" value="true" />
+      <created>1781102881713</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1781102881713</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Added RabbitConfig.java">
+      <option name="closed" value="true" />
+      <created>1781102914492</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1781102914492</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -280,7 +300,8 @@
     <MESSAGE value="rating and suggestion" />
     <MESSAGE value="Rating and suggestion" />
     <MESSAGE value="Added a compare and stat page for different fragrance" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a compare and stat page for different fragrance" />
+    <MESSAGE value="Added RabbitConfig.java" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added RabbitConfig.java" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
