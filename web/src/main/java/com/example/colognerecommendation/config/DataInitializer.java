@@ -43,8 +43,11 @@ public class DataInitializer {
     }
 
     /**
-     * Creates the default admin user with every fragrance pre-loaded into their
-     * collection, but only when the database contains no users yet.
+     * Ensures the default admin account exists on every startup.
+     *
+     * <p>Checks specifically for the configured admin username rather than just
+     * whether any users exist, so the admin is always available even after other
+     * users have been registered or the admin account was inadvertently deleted.
      *
      * <p>Because {@link FragranceService} is a constructor dependency, Spring has
      * already fully initialised it (including its own {@code @PostConstruct} fragrance
@@ -53,7 +56,7 @@ public class DataInitializer {
      */
     @PostConstruct
     public void seedAdminUser() {
-        if (userRepository.count() > 0) return;
+        if (userRepository.findByUsername(adminUsername).isPresent()) return;
 
         AppUser admin = new AppUser();
         admin.setUsername(adminUsername);

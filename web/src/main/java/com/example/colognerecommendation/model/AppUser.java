@@ -1,5 +1,6 @@
 package com.example.colognerecommendation.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -35,7 +36,8 @@ public class AppUser {
     @Column(unique = true, nullable = false)
     private String username;
 
-    /** BCrypt-hashed password. Never the plain-text value entered by the user. */
+    /** BCrypt-hashed password. Excluded from JSON responses so it never leaves the server. */
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 

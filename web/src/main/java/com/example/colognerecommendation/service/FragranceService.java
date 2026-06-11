@@ -139,13 +139,26 @@ public class FragranceService {
     }
 
     /**
-     * Persists a fragrance to the database. Inserts a new row when the fragrance's ID is
-     * {@code null}; updates the existing row when the ID is set.
+     * Persists a fragrance to the database and returns the saved entity.
+     * Inserts a new row when the fragrance's ID is {@code null};
+     * updates the existing row when the ID is set.
      *
-     * @param fragrance the fragrance to save; its {@code id} field is updated after insert
+     * @param fragrance the fragrance to save; its {@code id} field is populated after insert
+     * @return the saved fragrance with the database-assigned ID
      */
-    public void saveFragrance(Fragrance fragrance) {
-        fragranceRepository.save(fragrance);
+    public Fragrance saveFragrance(Fragrance fragrance) {
+        return fragranceRepository.save(fragrance);
+    }
+
+    /**
+     * Retrieves all fragrances whose IDs appear in the given collection.
+     * Used by the compare endpoint to load 2–3 specific fragrances by ID.
+     *
+     * @param ids the fragrance IDs to load
+     * @return matching fragrances in the order returned by JPA
+     */
+    public List<Fragrance> findFragrancesByIds(Iterable<Integer> ids) {
+        return fragranceRepository.findAllById(ids);
     }
 
     /**
